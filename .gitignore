@@ -32,6 +32,9 @@ local.properties
 *.hprof
 .cxx/
 
+android/
+gradle.properties
+
 # node.js
 #
 node_modules/
