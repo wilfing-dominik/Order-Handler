@@ -606,6 +606,7 @@ function EditProductInInventoryScreen({navigation, route}) {
     if (str.trim() === '') {
       return false;
     }
+    return true;
   }
 
   function handleDeleteItem(productId) {
@@ -891,18 +892,23 @@ function CompletedOrder({navigation, route}) {
 
   return (
     <View>
-      <TouchableOpacity
-        onPress={() => handleClick()}
-        style={{ backgroundColor: 'yellow', padding: 5, maxWidth: 60, textAlign: 'center', margin: 8}}
-      >
-        <Text>Export</Text>
-      </TouchableOpacity>
-      <FlatList
-        data={completedOrders}
-        renderItem={renderOrderItem}
-        keyExtractor={orderItem => orderItem.id}
-        numColumns={1}
-      />
+      <View>
+        <TouchableOpacity
+          onPress={() => handleClick()}
+          style={{ backgroundColor: 'yellow', padding: 5, maxWidth: 60, textAlign: 'center', margin: 8}}
+        >
+          <Text style={ styles.Font } >Export</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View>
+        <FlatList
+          data={completedOrders}
+          renderItem={renderOrderItem}
+          keyExtractor={orderItem => orderItem.id}
+          numColumns={1}
+        />
+      </View>
     </View>
   );
 }
@@ -985,6 +991,7 @@ const styles = StyleSheet.create({
     marginBottom: StatusBar.currentHeight || 0,
   },
   amountChangerContainer: {
+    minHeight: 100,
     flex: -4,
     flexDirection: 'row',
     alignItems: 'center',
