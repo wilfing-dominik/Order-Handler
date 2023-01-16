@@ -1,6 +1,6 @@
 # Order-Handler
 
-  An React Native android application for tracking orders in a restaurant.
+  A React Native android application for tracking orders in a restaurant.
   
   Features:
   - Add product to product inventory
