@@ -238,8 +238,8 @@ function TableScreen({ navigation, route }) {
       for(let j = 0; j < items[i].amount; j++) {
         db.transaction((tx) => {
           tx.executeSql(
-            'INSERT INTO CompletedOrder (product_name, order_date) VALUES (?,?)',
-            [items[i].name, year + '-' + month + '-' + date],
+            'INSERT INTO CompletedOrder (product_name, order_date, HUF, EUR) VALUES (?,?,?,?)',
+            [items[i].name, year + '-' + month + '-' + date,  parseInt(items[i].huf, 10),  parseInt(items[i].eur, 10)],
             (tx, results) => {
             }
           );
@@ -826,7 +826,7 @@ function CompletedOrder({navigation, route}) {
     var path = RNFS.DownloadDirectoryPath + '/' + route.params.date + '.csv';
 
     // write the file
-    RNFS.writeFile(path, new_data, 'utf8')
+    RNFS.writeFile(path, new_data, 'ascii')
     .then((success) => {
       console.log('FILE WRITTEN!');
     })
@@ -836,28 +836,28 @@ function CompletedOrder({navigation, route}) {
 
     //READ
     // get a list of files and directories in the main bundle
-    RNFS.readDir(RNFS.DownloadDirectoryPath) // On Android, use "RNFS.DocumentDirectoryPath" (MainBundlePath is not defined)
-    .then((result) => {
-      //console.log('GOT RESULT', result);
+    // RNFS.readDir(RNFS.DownloadDirectoryPath) // On Android, use "RNFS.DocumentDirectoryPath" (MainBundlePath is not defined)
+    // .then((result) => {
+    //   //console.log('GOT RESULT', result);
 
-      // stat the first file
-      return Promise.all([RNFS.stat(result[0].path), result[0].path]);
-    })
-    .then((statResult) => {
-      if (statResult[0].isFile()) {
-        // if we have a file, read it
-        return RNFS.readFile(statResult[1], 'utf8');
-      }
+    //   // stat the first file
+    //   return Promise.all([RNFS.stat(result[0].path), result[0].path]);
+    // })
+    // .then((statResult) => {
+    //   if (statResult[0].isFile()) {
+    //     // if we have a file, read it
+    //     return RNFS.readFile(statResult[1], 'ascii');
+    //   }
 
-      return 'no file';
-    })
-    .then((contents) => {
-      // log the file contents
-      console.log(contents);
-    })
-    .catch((err) => {
-      console.log(err.message, err.code);
-    });
+    //   return 'no file';
+    // })
+    // .then((contents) => {
+    //   // log the file contents
+    //   console.log(contents);
+    // })
+    // .catch((err) => {
+    //   console.log(err.message, err.code);
+    // });
   }
 
   function deleteCompletedOrder(cOrderId) {
