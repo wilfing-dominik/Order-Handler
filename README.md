@@ -11,3 +11,11 @@
   - Delete orders from completed orders
   - Delete orders from selected table 
   
+  ### Main page
+<img src="https://github.com/wilfing-dominik/Order-Handler/blob/3ff64cd480028116f9473f9eebb62fcdf26a8a66/main%20page.jpg" height=500px>
+
+  ### Table page
+<img src="https://github.com/wilfing-dominik/Order-Handler/blob/3ff64cd480028116f9473f9eebb62fcdf26a8a66/table%20page.jpg" height=500px>
+
+  ### Order History page
+<img src="https://github.com/wilfing-dominik/Order-Handler/blob/3ff64cd480028116f9473f9eebb62fcdf26a8a66/order%20history.jpg" height=500px>
