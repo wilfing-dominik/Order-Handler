@@ -1,105 +1,89 @@
 import {React, useState, useEffect} from 'react';
-import { NavigationContainer, useIsFocused } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {NavigationContainer, useIsFocused} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SQLite from 'react-native-sqlite-storage';
-import { 
-  Alert,  
-  StyleSheet, 
-  Text, 
-  View, 
-  Button,  
-  SafeAreaView, 
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  SafeAreaView,
   StatusBar,
-  FlatList, 
-  TouchableOpacity,  
-  TextInput, 
-  listViewItemSeparator 
+  FlatList,
+  TouchableOpacity,
+  TextInput,
+  listViewItemSeparator,
 } from 'react-native';
 import Papa from 'papaparse';
-import { PermissionsAndroid } from 'react-native'
+import {PermissionsAndroid} from 'react-native';
+import './styles/style';
 var RNFS = require('react-native-fs');
 
 //GLOBALS
-var db = SQLite.openDatabase({name: 'order-handler-db.db', createFromLocation: 1}, () => {
-  console.log("Database OPENED");
-}, (err) => {
-  console.log("SQL Error: " + err);
-});
-
+var db = SQLite.openDatabase(
+  {name: 'order-handler-db.db', createFromLocation: 1},
+  () => {
+    console.log('Database OPENED');
+  },
+  err => {
+    console.log('SQL Error: ' + err);
+  },
+);
 
 const Stack = createNativeStackNavigator();
 //GLOBALS END
-
 
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name = "HomeScreen"
+          name="HomeScreen"
           component={HomeScreen}
-          options={{ title: 'Összes asztal' }}
-        >
-        </Stack.Screen>
+          options={{title: 'Összes asztal'}}></Stack.Screen>
 
         <Stack.Screen
-          name = "TableScreen"
+          name="TableScreen"
           component={TableScreen}
-          options={{ title: 'Asztal' }}
-        >
-        </Stack.Screen>
+          options={{title: 'Asztal'}}></Stack.Screen>
 
         <Stack.Screen
-          name = "AddProductToTableScreen"
+          name="AddProductToTableScreen"
           component={AddProductToTableScreen}
-          options={{ title: 'Új tétel hozzáadása (Asztal x)' }}
-        >
-        </Stack.Screen>
+          options={{title: 'Új tétel hozzáadása (Asztal x)'}}></Stack.Screen>
 
         <Stack.Screen
-          name = "AllProductScreen"
+          name="AllProductScreen"
           component={AllProductScreen}
-          options={{ title: 'Összes termék' }}
-        >
-        </Stack.Screen>
+          options={{title: 'Összes termék'}}></Stack.Screen>
 
         <Stack.Screen
-          name = "AddProductToInventory"
+          name="AddProductToInventory"
           component={AddProductToInventoryScreen}
-          options={{ title: 'Teljesen új termék hozzáadása' }}
-        >
-        </Stack.Screen>
+          options={{title: 'Teljesen új termék hozzáadása'}}></Stack.Screen>
 
         <Stack.Screen
-          name = "EditProductInInventory"
+          name="EditProductInInventory"
           component={EditProductInInventoryScreen}
-          options={{ title: 'Termék adatainak változtatása' }}
-        >
-        </Stack.Screen>
+          options={{title: 'Termék adatainak változtatása'}}></Stack.Screen>
 
         <Stack.Screen
-          name = "OrderHistory"
+          name="OrderHistory"
           component={OrderHistoryScreen}
-          options={{ title: 'Rendeléstörténet' }}
-        >
-        </Stack.Screen>
+          options={{title: 'Rendeléstörténet'}}></Stack.Screen>
 
         <Stack.Screen
-          name = "CompletedOrderScreen"
+          name="CompletedOrderScreen"
           component={CompletedOrder}
-          options={{ title: 'Rendelések ? dátum alatt' }}
-        >
-        </Stack.Screen>
-
+          options={{title: 'Rendelések ? dátum alatt'}}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
-  )
-}
-
+  );
+};
 
 //SCREENS
-function HomeScreen({ navigation }) {
-
+function HomeScreen({navigation}) {
   const [items, setItems] = useState([]);
   const [empty, setEmpty] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -109,8 +93,8 @@ function HomeScreen({ navigation }) {
 
   // SQL GET ALL ORDERS JOINED WITH PRODUCTS
   useEffect(() => {
-    if(isVisible) {
-      db.transaction((tx) => {
+    if (isVisible) {
+      db.transaction(tx => {
         tx.executeSql(
           'SELECT * FROM ORD JOIN Product on ORD.product_id = Product.id',
           [],
@@ -119,14 +103,14 @@ function HomeScreen({ navigation }) {
             for (let i = 0; i < results.rows.length; ++i)
               temp.push(results.rows.item(i));
             setOrders(temp);
-          }
+          },
         );
       });
-      
+
       let temp = new Array(items.length).fill(0);
-      for(let i = 0; i < items.length; i++) {
+      for (let i = 0; i < items.length; i++) {
         for (let j = 0; j < orders.length; j++) {
-          if(items[i].id == orders[j].localtable_id) {
+          if (items[i].id == orders[j].localtable_id) {
             temp[i] += orders[j].huf * orders[j].amount;
           }
         }
@@ -137,64 +121,71 @@ function HomeScreen({ navigation }) {
 
   // SQL GET ALL TABLES
   useEffect(() => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        'SELECT * FROM LocalTable',
-        [],
-        (tx, results) => {
-          var temp = [];
-          for (let i = 0; i < results.rows.length; ++i)
-            temp.push(results.rows.item(i));
-          setItems(temp);
-   
-          if (results.rows.length >= 1) {
-            setEmpty(false);
-          } else {
-            setEmpty(true)
-          }
-   
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM LocalTable', [], (tx, results) => {
+        var temp = [];
+        for (let i = 0; i < results.rows.length; ++i)
+          temp.push(results.rows.item(i));
+        setItems(temp);
+
+        if (results.rows.length >= 1) {
+          setEmpty(false);
+        } else {
+          setEmpty(true);
         }
-      );
+      });
     });
   }, [isVisible]);
 
-  const Item = ({ item, onPress, backgroundColor }) => (
-    <TouchableOpacity onPress={onPress} style={[styles.HomeItem, backgroundColor]}>
+  const Item = ({item, onPress, backgroundColor}) => (
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.HomeItem, backgroundColor]}>
       <Text style={[styles.Font, styles.Title]}>{item.name}</Text>
-      <Text style={[styles.Font, styles.Title, styles.Bold]}>{tableSum[item.id-1]} Ft</Text>
+      <Text style={[styles.Font, styles.Title, styles.Bold]}>
+        {tableSum[item.id - 1]} Ft
+      </Text>
     </TouchableOpacity>
   );
 
-  const renderItem = ({ item }) => {
-    const backgroundColor = "#66c2ff";
-              
+  const renderItem = ({item}) => {
+    const backgroundColor = '#66c2ff';
+
     return (
       <Item
         item={item}
-        onPress={() => navigation.navigate("TableScreen", {id: item.id})}
-        backgroundColor={{ backgroundColor }}
+        onPress={() => navigation.navigate('TableScreen', {id: item.id})}
+        backgroundColor={{backgroundColor}}
       />
-      );
+    );
   };
 
   return (
     <SafeAreaView style={styles.HomeContainer}>
       <FlatList
-            data={items}
-            ItemSeparatorComponent={listViewItemSeparator}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderItem}
-            numColumns="2"
-          />
-      <View style={{ marginBottom: 8, marginTop: 8 }}><Button title="Terméklista" onPress={() => navigation.navigate("AllProductScreen")}/></View>
-      <View><Button title="Rendeléstörténet" onPress={() => navigation.navigate("OrderHistory")}/></View>
+        data={items}
+        ItemSeparatorComponent={listViewItemSeparator}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+        numColumns="2"
+      />
+      <View style={{marginBottom: 8, marginTop: 8}}>
+        <Button
+          title="Terméklista"
+          onPress={() => navigation.navigate('AllProductScreen')}
+        />
+      </View>
+      <View>
+        <Button
+          title="Rendeléstörténet"
+          onPress={() => navigation.navigate('OrderHistory')}
+        />
+      </View>
     </SafeAreaView>
   );
 }
 
-
-function TableScreen({ navigation, route }) {
-  
+function TableScreen({navigation, route}) {
   const [items, setItems] = useState([]);
   const [empty, setEmpty] = useState([]);
 
@@ -202,11 +193,11 @@ function TableScreen({ navigation, route }) {
 
   navigation.setOptions({
     title: `Asztal ` + route.params.id,
-  })
+  });
 
   useEffect(() => {
     if (isVisible) {
-      db.transaction((tx) => {
+      db.transaction(tx => {
         tx.executeSql(
           'SELECT * FROM ORD JOIN Product ON ORD.product_id=Product.id WHERE localtable_id=?;',
           [route.params.id],
@@ -215,102 +206,114 @@ function TableScreen({ navigation, route }) {
             for (let i = 0; i < results.rows.length; ++i)
               temp.push(results.rows.item(i));
             setItems(temp);
-   
+
             if (results.rows.length >= 1) {
               setEmpty(false);
             } else {
-              setEmpty(true)
+              setEmpty(true);
             }
-   
-          }
+          },
         );
       });
     }
   }, [isVisible, items]);
 
   function handleTablePay(localTableId) {
-    
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    for(let i = 0; i < items.length; i++) {
-      for(let j = 0; j < items[i].amount; j++) {
-        db.transaction((tx) => {
+    for (let i = 0; i < items.length; i++) {
+      for (let j = 0; j < items[i].amount; j++) {
+        db.transaction(tx => {
           tx.executeSql(
             'INSERT INTO CompletedOrder (product_name, order_date, HUF, EUR) VALUES (?,?,?,?)',
-            [items[i].name, year + '-' + month + '-' + date,  parseInt(items[i].huf, 10),  parseInt(items[i].eur, 10)],
-            (tx, results) => {
-            }
+            [
+              items[i].name,
+              year + '-' + month + '-' + date,
+              parseInt(items[i].huf, 10),
+              parseInt(items[i].eur, 10),
+            ],
+            (tx, results) => {},
           );
         });
       }
     }
 
-    db.transaction((tx) => {
+    db.transaction(tx => {
       tx.executeSql(
         'DELETE FROM ORD WHERE localtable_id=?;',
         [localTableId],
-        (tx, results) => {
-        }
+        (tx, results) => {},
       );
     });
     alert('Fizetve!');
-    navigation.navigate("HomeScreen")
+    navigation.navigate('HomeScreen');
   }
 
-  function deleteOrder(orderId, amount) { // TODO
-    if(amount > 1) {
+  function deleteOrder(orderId, amount) {
+    // TODO
+    if (amount > 1) {
       db.transaction(function (tx) {
         tx.executeSql(
           'UPDATE ORD SET amount=? WHERE localtable_id=? AND product_id=?',
-          [amount-1, route.params.id, orderId],
+          [amount - 1, route.params.id, orderId],
           (tx, results) => {
             console.log('Results', results.rowsAffected);
             if (results.rowsAffected > 0) {
               //Alert.alert('Rendelés hozzáadva: ' + productName);
-            } 
-            else Alert.alert('Sikertelen hozzáadás');
-          }
+            } else Alert.alert('Sikertelen hozzáadás');
+          },
         );
       });
-    }
-    else{
-      db.transaction((tx) => {
+    } else {
+      db.transaction(tx => {
         tx.executeSql(
           'DELETE FROM ORD WHERE product_id=?;',
           [orderId],
-          (tx, results) => {
-          }
+          (tx, results) => {},
         );
       });
       // navigation.navigate("HomeScreen")
     }
-    }
-  
-  const renderTableItem = ({ item }) => {
+  }
+
+  const renderTableItem = ({item}) => {
     return (
-        <View style={styles.TableItem}>
-          <Text style={styles.Bold}>{item.name}</Text>
-          <Text><Text style={styles.Bold}>{item.eur}</Text> Eur </Text>
-          <Text><Text style={styles.Bold}>{item.huf}</Text> Huf</Text>
-          <Text><Text style={styles.Bold}>{item.amount}</Text> DB</Text>
-          <TouchableOpacity
-            onPress={() => deleteOrder(item.id, item.amount)}
-          >
-            <Text style={{ backgroundColor: "red", padding: 5, fontWeight: "bold" ,textAlign:"center"}}>Törlés {"\n"} (-1)</Text>
-          </TouchableOpacity>
-        </View>
-      );
+      <View style={styles.TableItem}>
+        <Text style={styles.Bold}>{item.name}</Text>
+        <Text>
+          <Text style={styles.Bold}>{item.eur}</Text> Eur{' '}
+        </Text>
+        <Text>
+          <Text style={styles.Bold}>{item.huf}</Text> Huf
+        </Text>
+        <Text>
+          <Text style={styles.Bold}>{item.amount}</Text> DB
+        </Text>
+        <TouchableOpacity onPress={() => deleteOrder(item.id, item.amount)}>
+          <Text
+            style={{
+              backgroundColor: 'red',
+              padding: 5,
+              fontWeight: 'bold',
+              textAlign: 'center',
+            }}>
+            Törlés {'\n'} (-1)
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   return (
     <View style={styles.TableScreenContainer}>
       <View style={styles.TableListContainer}>
         <Text style={[styles.Font, styles.TableSum]}>
-          Teljes összeg: 
+          Teljes összeg:
           <Text style={[styles.TableSum, styles.Bold, styles.TableSum]}>
-            {items.reduce((a,v) =>  a = a + v.huf*v.amount, 0)} HUF | {items.reduce((a,v) =>  a = a + v.eur*v.amount, 0)} EUR
+            {items.reduce((a, v) => (a = a + v.huf * v.amount), 0)} HUF |{' '}
+            {items.reduce((a, v) => (a = a + v.eur * v.amount), 0)} EUR
           </Text>
         </Text>
         <FlatList
@@ -321,86 +324,79 @@ function TableScreen({ navigation, route }) {
         />
       </View>
       <View style={styles.TableButtonsContainer}>
-      <Button
-        title="Új tétel"
-        onPress={() => navigation.navigate("AddProductToTableScreen", {tableId: route.params.id})}
-      />
-      <Button
-        title="Fizetett"
-        onPress={() => handleTablePay(route.params.id)}
-      />
+        <Button
+          title="Új tétel"
+          onPress={() =>
+            navigation.navigate('AddProductToTableScreen', {
+              tableId: route.params.id,
+            })
+          }
+        />
+        <Button
+          title="Fizetett"
+          onPress={() => handleTablePay(route.params.id)}
+        />
+      </View>
     </View>
-  </View>
   );
 }
 
-
-function AddProductToTableScreen({ navigation, route }) {
-
+function AddProductToTableScreen({navigation, route}) {
   const [products, setProducts] = useState([]);
   const [empty, setEmpty] = useState([]);
   const [newAmount, setNewAmount] = useState(1);
   const [orders, setOrders] = useState([]);
 
-  
   navigation.setOptions({
     title: 'Új tétel hozzáadása (Asztal ' + route.params.tableId + ')',
-  })
+  });
 
   function handlePressIncreaseAmount() {
-    if(newAmount+1 <= 99)
-      setNewAmount(newAmount+1)
+    if (newAmount + 1 <= 99) setNewAmount(newAmount + 1);
   }
 
   function handlePressDecreaseAmount() {
-    if(newAmount-1 > 0)
-      setNewAmount(newAmount-1)
-    }
+    if (newAmount - 1 > 0) setNewAmount(newAmount - 1);
+  }
 
   //SQL GET ALL PRODUCTS
   useEffect(() => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        'SELECT * FROM Product',
-        [],
-        (tx, results) => {
-          var temp = [];
-          for (let i = 0; i < results.rows.length; ++i)
-            temp.push(results.rows.item(i));
-          setProducts(temp);
- 
-          if (results.rows.length >= 1) {
-            setEmpty(false);
-          } else {
-            setEmpty(true)
-          }
- 
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM Product', [], (tx, results) => {
+        var temp = [];
+        for (let i = 0; i < results.rows.length; ++i)
+          temp.push(results.rows.item(i));
+        setProducts(temp);
+
+        if (results.rows.length >= 1) {
+          setEmpty(false);
+        } else {
+          setEmpty(true);
         }
-      );
+      });
     });
   }, []);
 
   //SQL GET ALL ORDERS
   useEffect(() => {
     db.transaction(function (tx) {
-      tx.executeSql(
-        'SELECT * FROM ORD',
-        [],
-        (tx, results) => {
-          var temp = [];
-          for (let i = 0; i < results.rows.length; ++i)
-            temp.push(results.rows.item(i));
-          setOrders(temp);
-        }
-      );
+      tx.executeSql('SELECT * FROM ORD', [], (tx, results) => {
+        var temp = [];
+        for (let i = 0; i < results.rows.length; ++i)
+          temp.push(results.rows.item(i));
+        setOrders(temp);
+      });
     });
   }, []);
 
   function HandleAddProductToTableButton(productId, localTableId, newAmount) {
     isAlreadyAdded = false;
-    oldAmount = 0
+    oldAmount = 0;
     for (let i = 0; i < orders.length; ++i) {
-      if (orders[i].product_id == productId && orders[i].localtable_id == localTableId) {
+      if (
+        orders[i].product_id == productId &&
+        orders[i].localtable_id == localTableId
+      ) {
         isAlreadyAdded = true;
         oldAmount = orders[i].amount;
       }
@@ -411,13 +407,10 @@ function AddProductToTableScreen({ navigation, route }) {
         tx.executeSql(
           'INSERT INTO ORD (localtable_id, product_id, amount) VALUES (?,?,?)',
           [localTableId, productId, newAmount],
-          (tx, results) => {
-
-          }
+          (tx, results) => {},
         );
       });
-    }
-    else {
+    } else {
       db.transaction(function (tx) {
         tx.executeSql(
           'UPDATE ORD SET amount=? WHERE localtable_id=? AND product_id=?',
@@ -426,34 +419,41 @@ function AddProductToTableScreen({ navigation, route }) {
             console.log('Results', results.rowsAffected);
             if (results.rowsAffected > 0) {
               Alert.alert('Rendelés hozzáadva: ' + productName);
-            } 
-            else Alert.alert('Sikertelen hozzáadás');
-          }
+            } else Alert.alert('Sikertelen hozzáadás');
+          },
         );
       });
     }
     navigation.navigate('TableScreen', {id: route.params.tableId});
   }
 
-  const ProductItem = ({ item, onPress, backgroundColor }) => (
-    <TouchableOpacity onPress={onPress} style={[styles.HomeItem, backgroundColor]}>
+  const ProductItem = ({item, onPress, backgroundColor}) => (
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.HomeItem, backgroundColor]}>
       <Text style={[styles.Title]}>{item.name}</Text>
       <Text style={[styles.Title, styles.Bold]}>{item.huf} Huf</Text>
       <Text style={[styles.Title, styles.Bold]}>{item.eur} Eur</Text>
     </TouchableOpacity>
   );
 
-  const renderProductItem = ({ item }) => {
-    const backgroundColor = "#66c2ff";
+  const renderProductItem = ({item}) => {
+    const backgroundColor = '#66c2ff';
     const color = 'black';
-              
+
     return (
       <ProductItem
         item={item}
-        backgroundColor={{ backgroundColor }}
-        onPress= { () => HandleAddProductToTableButton(item.id, route.params.tableId, newAmount) }
+        backgroundColor={{backgroundColor}}
+        onPress={() =>
+          HandleAddProductToTableButton(
+            item.id,
+            route.params.tableId,
+            newAmount,
+          )
+        }
       />
-      );
+    );
   };
 
   return (
@@ -467,62 +467,65 @@ function AddProductToTableScreen({ navigation, route }) {
 
       <Text style={styles.Font}>Darab: {newAmount}</Text>
       <View style={styles.amountChangerContainer}>
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => handlePressDecreaseAmount()}
-          style={ styles.amountButton }>
-          <Text style={{ fontSize:25 }}>-</Text>
+          style={styles.amountButton}>
+          <Text style={{fontSize: 25}}>-</Text>
         </TouchableOpacity>
-        
-        <TouchableOpacity 
+
+        <TouchableOpacity
           onPress={() => handlePressIncreaseAmount()}
-          style={ styles.amountButton }>
-          <Text style={{ fontSize:25 }} >+</Text>
+          style={styles.amountButton}>
+          <Text style={{fontSize: 25}}>+</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 }
 
-
-function AllProductScreen({ navigation }) {
-
+function AllProductScreen({navigation}) {
   const [items, setItems] = useState([]);
   const [empty, setEmpty] = useState([]);
 
   const isVisible = useIsFocused();
 
-    // SQL QUERY
+  // SQL QUERY
   useEffect(() => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        'SELECT * FROM Product',
-        [],
-        (tx, results) => {
-          var temp = [];
-          for (let i = 0; i < results.rows.length; ++i)
-            temp.push(results.rows.item(i));
-          setItems(temp);
-   
-          if (results.rows.length >= 1) {
-            setEmpty(false);
-          } else {
-            setEmpty(true)
-          }
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM Product', [], (tx, results) => {
+        var temp = [];
+        for (let i = 0; i < results.rows.length; ++i)
+          temp.push(results.rows.item(i));
+        setItems(temp);
+
+        if (results.rows.length >= 1) {
+          setEmpty(false);
+        } else {
+          setEmpty(true);
         }
-      );
+      });
     });
   }, [isVisible]);
 
-  const renderAllProductItem = ({ item }) => {
-    const backgroundColor = "#66c2ff";
-              
+  const renderAllProductItem = ({item}) => {
+    const backgroundColor = '#66c2ff';
+
     return (
-      <TouchableOpacity 
-        onPress={ () => navigation.navigate('EditProductInInventory', {id: item.id, name: item.name, eur: item.eur, huf: item.huf})} 
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('EditProductInInventory', {
+            id: item.id,
+            name: item.name,
+            eur: item.eur,
+            huf: item.huf,
+          })
+        }
         style={[styles.AllProductItem, backgroundColor]}>
-        <Text style={[styles.Font, styles.Title]}>{item.name} {item.huf} Huf {item.eur} EUR</Text>
-    </TouchableOpacity>
-      );
+        <Text style={[styles.Font, styles.Title]}>
+          {item.name} {item.huf} Huf {item.eur} EUR
+        </Text>
+      </TouchableOpacity>
+    );
   };
 
   return (
@@ -536,16 +539,14 @@ function AllProductScreen({ navigation }) {
         />
       </SafeAreaView>
       <Button
-        title= 'Új termék hozzáadása'
+        title="Új termék hozzáadása"
         onPress={() => navigation.navigate('AddProductToInventory')}
       />
     </View>
   );
 }
 
-
-function AddProductToInventoryScreen({ navigation }) {
-
+function AddProductToInventoryScreen({navigation}) {
   const [productName, setProductName] = useState('');
   const [productEur, setProductEur] = useState('');
   const [productHuf, setProductHuf] = useState('');
@@ -554,15 +555,20 @@ function AddProductToInventoryScreen({ navigation }) {
     if (str.trim() === '') {
       return false;
     }
-  
+
     return !isNaN(str);
   }
 
   function handleAddProductToInventory() {
-    if(productName.length < 3 || !isNumber(productHuf) || !isNumber(productEur)) {
-      alert("A megadott adatok nem megfelelőek! \nTermék név min. 3 BETŰ, az áraknak pedig SZÁMNAK kell lennie!");
-    }
-    else {
+    if (
+      productName.length < 3 ||
+      !isNumber(productHuf) ||
+      !isNumber(productEur)
+    ) {
+      alert(
+        'A megadott adatok nem megfelelőek! \nTermék név min. 3 BETŰ, az áraknak pedig SZÁMNAK kell lennie!',
+      );
+    } else {
       db.transaction(function (tx) {
         tx.executeSql(
           'INSERT INTO Product (name, eur, huf) VALUES (?,?,?)',
@@ -571,9 +577,8 @@ function AddProductToInventoryScreen({ navigation }) {
             console.log('Results', results.rowsAffected);
             if (results.rowsAffected > 0) {
               Alert.alert('Termék hozzáadva: ' + productName);
-            } 
-            else Alert.alert('Sikertelen hozzáadás');
-          }
+            } else Alert.alert('Sikertelen hozzáadás');
+          },
         );
       });
     }
@@ -583,21 +588,28 @@ function AddProductToInventoryScreen({ navigation }) {
   return (
     <View style={styles.AddProductToInventoryScreen}>
       <View>
-        <TextInput placeholder='Termék név' placeholderTextColor='#2b2b28' style={[styles.Font, styles.Input]} onChangeText={ (productName)=>setProductName(productName) }></TextInput>
-        <TextInput placeholder='Ár euróban' placeholderTextColor='#2b2b28' style={[styles.Font, styles.Input]} onChangeText={ (productEur)=>setProductEur(productEur) }></TextInput>
-        <TextInput placeholder='Ár forintban' placeholderTextColor='#2b2b28' style={[styles.Font, styles.Input]} onChangeText={ (productHuf)=>setProductHuf(productHuf) }></TextInput>
+        <TextInput
+          placeholder="Termék név"
+          placeholderTextColor="#2b2b28"
+          style={[styles.Font, styles.Input]}
+          onChangeText={productName => setProductName(productName)}></TextInput>
+        <TextInput
+          placeholder="Ár euróban"
+          placeholderTextColor="#2b2b28"
+          style={[styles.Font, styles.Input]}
+          onChangeText={productEur => setProductEur(productEur)}></TextInput>
+        <TextInput
+          placeholder="Ár forintban"
+          placeholderTextColor="#2b2b28"
+          style={[styles.Font, styles.Input]}
+          onChangeText={productHuf => setProductHuf(productHuf)}></TextInput>
       </View>
-      <Button
-        title="Hozzáadás"
-        onPress={() => handleAddProductToInventory()}
-      />
+      <Button title="Hozzáadás" onPress={() => handleAddProductToInventory()} />
     </View>
   );
 }
 
-
 function EditProductInInventoryScreen({navigation, route}) {
-
   const [productName, setProductName] = useState('');
   const [productEur, setProductEur] = useState('');
   const [productHuf, setProductHuf] = useState('');
@@ -618,19 +630,23 @@ function EditProductInInventoryScreen({navigation, route}) {
           console.log('Results', results.rowsAffected);
           if (results.rowsAffected > 0) {
             Alert.alert('Termék törölve: ' + productName);
-          } 
-          else Alert.alert('Sikertelen törlés');
-        }
+          } else Alert.alert('Sikertelen törlés');
+        },
       );
     });
-    navigation.navigate('AllProductScreen')
+    navigation.navigate('AllProductScreen');
   }
 
   function handleEditItem(productId, productName, productEur, productHuf) {
-    if(productName.length < 3 || !isNumber(productHuf) || !isNumber(productEur)) {
-      alert("A megadott adatok nem megfelelőek! \nTermék név min. 3 BETŰ, az áraknak pedig SZÁMNAK kell lennie!");
-    }
-    else {
+    if (
+      productName.length < 3 ||
+      !isNumber(productHuf) ||
+      !isNumber(productEur)
+    ) {
+      alert(
+        'A megadott adatok nem megfelelőek! \nTermék név min. 3 BETŰ, az áraknak pedig SZÁMNAK kell lennie!',
+      );
+    } else {
       db.transaction(function (tx) {
         tx.executeSql(
           'UPDATE Product SET name=?, eur=?, huf=? WHERE id=?',
@@ -639,9 +655,8 @@ function EditProductInInventoryScreen({navigation, route}) {
             console.log('Results', results.rowsAffected);
             if (results.rowsAffected > 0) {
               Alert.alert('Termék módosítva: ' + productName);
-            } 
-            else Alert.alert('Sikertelen módosítás');
-          }
+            } else Alert.alert('Sikertelen módosítás');
+          },
         );
       });
       navigation.navigate('HomeScreen');
@@ -654,36 +669,32 @@ function EditProductInInventoryScreen({navigation, route}) {
 
       <Text style={styles.Font}>Név:</Text>
       <TextInput
-        style={styles.Font} 
-        onChangeText={ (productName)=>setProductName(productName) }
-        placeholder = {route.params.name}
-        placeholderTextColor='#2b2b28'
-        >
-      </TextInput>
+        style={styles.Font}
+        onChangeText={productName => setProductName(productName)}
+        placeholder={route.params.name}
+        placeholderTextColor="#2b2b28"></TextInput>
 
       <Text style={styles.Font}>Forint:</Text>
       <TextInput
         style={styles.Font}
-        onChangeText={ (productHuf)=>setProductHuf(productHuf) }
-        placeholder = {String(route.params.huf)}
-        placeholderTextColor='#2b2b28'
-        >
-      </TextInput>
+        onChangeText={productHuf => setProductHuf(productHuf)}
+        placeholder={String(route.params.huf)}
+        placeholderTextColor="#2b2b28"></TextInput>
 
       <Text style={styles.Font}>Euró:</Text>
       <TextInput
-        style={styles.Font} 
-        onChangeText={ (productEur)=>setProductEur(productEur) }
-        placeholder = {String(route.params.eur)}
-        placeholderTextColor='#2b2b28'
-        >
-      </TextInput>
+        style={styles.Font}
+        onChangeText={productEur => setProductEur(productEur)}
+        placeholder={String(route.params.eur)}
+        placeholderTextColor="#2b2b28"></TextInput>
 
-      <Button 
+      <Button
         title="Adatok módosítása"
-        onPress={() => handleEditItem(route.params.id, productName, productEur, productHuf)}
+        onPress={() =>
+          handleEditItem(route.params.id, productName, productEur, productHuf)
+        }
       />
-      <Button 
+      <Button
         title="Termék törlése"
         onPress={() => handleDeleteItem(route.params.id)}
       />
@@ -691,17 +702,15 @@ function EditProductInInventoryScreen({navigation, route}) {
   );
 }
 
-
 function OrderHistoryScreen({navigation}) {
-
   const [distinctDates, setDistinctDates] = useState([]);
 
   const isVisible = useIsFocused();
 
-  //SQL GET ALL distinct dates 
+  //SQL GET ALL distinct dates
   useEffect(() => {
-    if(isVisible) {
-      db.transaction((tx) => {
+    if (isVisible) {
+      db.transaction(tx => {
         tx.executeSql(
           'SELECT DISTINCT order_date FROM CompletedOrder ORDER BY order_date',
           [],
@@ -710,57 +719,51 @@ function OrderHistoryScreen({navigation}) {
             for (let i = 0; i < results.rows.length; ++i)
               temp.push(results.rows.item(i));
             setDistinctDates(temp);
-          }
+          },
         );
       });
     }
-  }, [isVisible]); 
+  }, [isVisible]);
 
-  const renderOrderItem = ({ item }) => {
-
+  const renderOrderItem = ({item}) => {
     return (
-          <TouchableOpacity
-            style={styles.TableItem}
-            onPress={() => navigation.navigate("CompletedOrderScreen", {date: item.order_date})}
-          >
-            <Text
-              style={{fontWeight: 'bold', fontSize: 18}}
-            >
-              {item.order_date}
-            </Text>
-
-
-          </TouchableOpacity>   
+      <TouchableOpacity
+        style={styles.TableItem}
+        onPress={() =>
+          navigation.navigate('CompletedOrderScreen', {date: item.order_date})
+        }>
+        <Text style={{fontWeight: 'bold', fontSize: 18}}>
+          {item.order_date}
+        </Text>
+      </TouchableOpacity>
     );
   };
 
-  return(
+  return (
     <View>
       <FlatList
         data={distinctDates}
         renderItem={renderOrderItem}
         keyExtractor={orderDates => orderDates.id}
         numColumns={1}
-        />
+      />
     </View>
   );
 }
 
-
 function CompletedOrder({navigation, route}) {
-  
   const [completedOrders, setCompletedOrders] = useState([]);
 
   navigation.setOptions({
     title: route.params.date + ' fizetett rendelései',
-  })
+  });
 
   let isVisible = useIsFocused();
 
-   //SQL GET ALL completed orders 
-   useEffect(() => {
-    if(isVisible) {
-      db.transaction((tx) => {
+  //SQL GET ALL completed orders
+  useEffect(() => {
+    if (isVisible) {
+      db.transaction(tx => {
         tx.executeSql(
           'SELECT * FROM CompletedOrder WHERE order_date=?',
           [route.params.date],
@@ -769,54 +772,51 @@ function CompletedOrder({navigation, route}) {
             for (let i = 0; i < results.rows.length; ++i)
               temp.push(results.rows.item(i));
             setCompletedOrders(temp);
-          }
+          },
         );
       });
     }
   }, [isVisible, completedOrders]);
 
   const handleClick = async () => {
-
-    try{
+    try {
       // Check for Permission (check if permission is already given or not)
-      let isPermitedExternalStorage = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+      let isPermitedExternalStorage = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      );
 
-      if(!isPermitedExternalStorage){
-
+      if (!isPermitedExternalStorage) {
         // Ask for permission
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
           {
-            title: "Storage permission needed",
-            buttonNeutral: "Ask Me Later",
-            buttonNegative: "Cancel",
-            buttonPositive: "OK"
-          }
+            title: 'Storage permission needed',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
         );
 
-        
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           // Permission Granted (calling our exportDataToExcel function)
           toCSV();
-          console.log("Permission granted");
+          console.log('Permission granted');
         } else {
           // Permission denied
-          console.log("Permission denied");
+          console.log('Permission denied');
         }
-      }else{
-         // Already have Permission (calling our exportDataToExcel function)
-         toCSV();
+      } else {
+        // Already have Permission (calling our exportDataToExcel function)
+        toCSV();
       }
-    }catch(e){
+    } catch (e) {
       console.log('Error while checking permission');
       console.log(e);
-      return
+      return;
     }
-    
   };
 
   function toCSV() {
-    
     let new_data = Papa.unparse(completedOrders);
 
     //WRITE
@@ -827,12 +827,12 @@ function CompletedOrder({navigation, route}) {
 
     // write the file
     RNFS.writeFile(path, new_data, 'ascii')
-    .then((success) => {
-      console.log('FILE WRITTEN!');
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
+      .then(success => {
+        console.log('FILE WRITTEN!');
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
 
     //READ
     // get a list of files and directories in the main bundle
@@ -861,32 +861,34 @@ function CompletedOrder({navigation, route}) {
   }
 
   function deleteCompletedOrder(cOrderId) {
-    db.transaction((tx) => {
+    db.transaction(tx => {
       tx.executeSql(
         'DELETE FROM CompletedOrder WHERE id=?;',
         [cOrderId],
-        (tx, results) => {
-        }
+        (tx, results) => {},
       );
     });
   }
 
-  const renderOrderItem = ({ item }) => {
-
+  const renderOrderItem = ({item}) => {
     return (
       <View style={styles.TableItem}>
         <Text style={styles.Bold}>{item.product_name}</Text>
-        <Text>Fizetés dátuma: <Text style={styles.Bold}>{item.order_date}</Text></Text>
-        <TouchableOpacity
-          onPress={() => deleteCompletedOrder(item.id)}
-        >
+        <Text>
+          Fizetés dátuma: <Text style={styles.Bold}>{item.order_date}</Text>
+        </Text>
+        <TouchableOpacity onPress={() => deleteCompletedOrder(item.id)}>
           <Text
-            style={{ backgroundColor: "red", padding: 5, fontWeight: "bold" ,textAlign:"center"}}
-          >
+            style={{
+              backgroundColor: 'red',
+              padding: 5,
+              fontWeight: 'bold',
+              textAlign: 'center',
+            }}>
             Törlés
           </Text>
         </TouchableOpacity>
-        </View>
+      </View>
     );
   };
 
@@ -895,9 +897,14 @@ function CompletedOrder({navigation, route}) {
       <View>
         <TouchableOpacity
           onPress={() => handleClick()}
-          style={{ backgroundColor: 'yellow', padding: 5, maxWidth: 60, textAlign: 'center', margin: 8}}
-        >
-          <Text style={ styles.Font } >Export</Text>
+          style={{
+            backgroundColor: 'yellow',
+            padding: 5,
+            maxWidth: 60,
+            textAlign: 'center',
+            margin: 8,
+          }}>
+          <Text style={styles.Font}>Export</Text>
         </TouchableOpacity>
       </View>
 
@@ -914,122 +921,8 @@ function CompletedOrder({navigation, route}) {
 }
 //SCREENS END
 
-
 //STYLES
-const styles = StyleSheet.create({  
-  Font: {
-    color: "#2b2b28",
-    fontSize: 14,
-  }, 
-  Bold: {
-    fontWeight: 'bold',
-  },
-  Input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
 
-  HomeContainer: {
-    flex: 1,
-    alignItems: 'center',
-    marginTop: StatusBar.currentHeight || 0,
-    marginBottom: StatusBar.currentHeight || 0,
-  },
-  HomeItem: {
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    minWidth: 125,
-    minHeight: 70,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  Hometitle: {
-    fontSize: 32,
-  },
-
-  TableScreenContainer: {
-    flex: 1,
-  },
-  TableListContainer: {
-    flex: 1,
-    ColumnsNum: 1,
-    alignItems: 'center',
-    marginTop: StatusBar.currentHeight || 0,
-  },
-  TableItem: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: "#66c2ff",
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    minWidth: 300  
-  },
-  TableButtonsContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    maxHeight: 36,
-    maxWidth: 420,
-    marginTop: 20,
-    marginBottom: 20,
-    justifyContent: 'space-around',
-  },
-  TableSum: {
-    fontSize: 18,
-  },
-
-  AddProductToTableContainer: {
-    flex: 1,
-    ColumnsNum: 1,
-    alignItems: 'center',
-    marginTop: StatusBar.currentHeight || 0,
-    marginBottom: StatusBar.currentHeight || 0,
-  },
-  amountChangerContainer: {
-    minHeight: 100,
-    flex: -4,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  amountButton: {
-    textAlign: 'center',
-    margin: 30,
-    backgroundColor: '#66c2ff',
-    paddingRight: 15,
-    paddingLeft: 15,
-    borderRadius: 8,
-  },
-
-
-  AllProductContainer: {
-    flex: 1,
-    
-  },
-  AllProductListContainer: {
-    flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
-  },
-  AllProductItem: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: "#66c2ff",
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-
-  AddProductToInventoryScreen: {
-    flex: 1,
-    justifyContent: 'space-between',
-  }
-});
 //STYLES END
 
-export default App
+export default App;
