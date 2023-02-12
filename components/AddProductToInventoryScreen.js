@@ -1,0 +1,61 @@
+import React, {useState} from 'react';
+import {View, Button} from 'react-native';
+import {sqlQuery} from '../utils/dbConnection';
+
+export default AddProductToInventoryScreen = ({navigation}) => {
+  const [productName, setProductName] = useState('');
+  const [productEur, setProductEur] = useState('');
+  const [productHuf, setProductHuf] = useState('');
+
+  function isNumber(str) {
+    if (str.trim() === '') {
+      return false;
+    }
+
+    return !isNaN(str);
+  }
+
+  function handleAddProductToInventory() {
+    if (
+      productName.length < 3 ||
+      !isNumber(productHuf) ||
+      !isNumber(productEur)
+    ) {
+      alert(
+        'A megadott adatok nem megfelelőek! \nTermék név min. 3 BETŰ, az áraknak pedig SZÁMNAK kell lennie!',
+      );
+    } else {
+      sqlQuery(
+        'INSERT INTO Product (name, eur, huf) VALUES (?,?,?)',
+        null,
+        productName,
+        productEur,
+        productHuf,
+      );
+      navigation.navigate('AllProductScreen');
+    }
+  }
+
+  return (
+    <View style={styles.AddProductToInventoryScreen}>
+      <View>
+        <TextInput
+          placeholder="Termék név"
+          placeholderTextColor="#2b2b28"
+          style={[styles.Font, styles.Input]}
+          onChangeText={productName => setProductName(productName)}></TextInput>
+        <TextInput
+          placeholder="Ár euróban"
+          placeholderTextColor="#2b2b28"
+          style={[styles.Font, styles.Input]}
+          onChangeText={productEur => setProductEur(productEur)}></TextInput>
+        <TextInput
+          placeholder="Ár forintban"
+          placeholderTextColor="#2b2b28"
+          style={[styles.Font, styles.Input]}
+          onChangeText={productHuf => setProductHuf(productHuf)}></TextInput>
+      </View>
+      <Button title="Hozzáadás" onPress={() => handleAddProductToInventory()} />
+    </View>
+  );
+};
