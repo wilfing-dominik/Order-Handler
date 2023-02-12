@@ -1,6 +1,6 @@
 import SQLite from 'react-native-sqlite-storage';
 
-let openDatabase = dbName => {
+let openDB = dbName => {
   var db = SQLite.openDatabase(
     {name: dbName, createFromLocation: 1},
     () => {
@@ -14,9 +14,9 @@ let openDatabase = dbName => {
   return db;
 };
 
-export const sqlQuery = (query, setter, ...data) => {
-  let db = openDatabase('order-handler-db.db');
+let db = openDB('order-handler-db.db');
 
+export const sqlQuery = (query, setter, ...data) => {
   db.transaction(tx => {
     tx.executeSql(query, [...data], (tx, results) => {
       if (setter) {
