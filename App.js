@@ -1,15 +1,12 @@
 import {React, useState, useEffect} from 'react';
 import {NavigationContainer, useIsFocused} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SQLite from 'react-native-sqlite-storage';
 import {
   Alert,
-  StyleSheet,
   Text,
   View,
   Button,
   SafeAreaView,
-  StatusBar,
   FlatList,
   TouchableOpacity,
   TextInput,
@@ -18,21 +15,10 @@ import {
 import Papa from 'papaparse';
 import {PermissionsAndroid} from 'react-native';
 import './styles/style';
+import {sqlQuery} from './utils/dbConnection';
 var RNFS = require('react-native-fs');
 
-//GLOBALS
-var db = SQLite.openDatabase(
-  {name: 'order-handler-db.db', createFromLocation: 1},
-  () => {
-    console.log('Database OPENED');
-  },
-  err => {
-    console.log('SQL Error: ' + err);
-  },
-);
-
 const Stack = createNativeStackNavigator();
-//GLOBALS END
 
 const App = () => {
   return (
@@ -82,10 +68,8 @@ const App = () => {
   );
 };
 
-//SCREENS
 function HomeScreen({navigation}) {
   const [items, setItems] = useState([]);
-  const [empty, setEmpty] = useState([]);
   const [orders, setOrders] = useState([]);
   const [tableSum, setTableSum] = useState([]);
 
@@ -94,18 +78,10 @@ function HomeScreen({navigation}) {
   // SQL GET ALL ORDERS JOINED WITH PRODUCTS
   useEffect(() => {
     if (isVisible) {
-      db.transaction(tx => {
-        tx.executeSql(
-          'SELECT * FROM ORD JOIN Product on ORD.product_id = Product.id',
-          [],
-          (tx, results) => {
-            var temp = [];
-            for (let i = 0; i < results.rows.length; ++i)
-              temp.push(results.rows.item(i));
-            setOrders(temp);
-          },
-        );
-      });
+      sqlQuery(
+        'SELECT * FROM ORD JOIN Product on ORD.product_id = Product.id',
+        setOrders,
+      );
 
       let temp = new Array(items.length).fill(0);
       for (let i = 0; i < items.length; i++) {
@@ -121,20 +97,7 @@ function HomeScreen({navigation}) {
 
   // SQL GET ALL TABLES
   useEffect(() => {
-    db.transaction(tx => {
-      tx.executeSql('SELECT * FROM LocalTable', [], (tx, results) => {
-        var temp = [];
-        for (let i = 0; i < results.rows.length; ++i)
-          temp.push(results.rows.item(i));
-        setItems(temp);
-
-        if (results.rows.length >= 1) {
-          setEmpty(false);
-        } else {
-          setEmpty(true);
-        }
-      });
-    });
+    sqlQuery('SELECT * FROM LocalTable', setItems);
   }, [isVisible]);
 
   const Item = ({item, onPress, backgroundColor}) => (
@@ -187,7 +150,6 @@ function HomeScreen({navigation}) {
 
 function TableScreen({navigation, route}) {
   const [items, setItems] = useState([]);
-  const [empty, setEmpty] = useState([]);
 
   const isVisible = useIsFocused();
 
@@ -197,24 +159,12 @@ function TableScreen({navigation, route}) {
 
   useEffect(() => {
     if (isVisible) {
-      db.transaction(tx => {
-        tx.executeSql(
-          'SELECT * FROM ORD JOIN Product ON ORD.product_id=Product.id WHERE localtable_id=?;',
-          [route.params.id],
-          (tx, results) => {
-            var temp = [];
-            for (let i = 0; i < results.rows.length; ++i)
-              temp.push(results.rows.item(i));
-            setItems(temp);
-
-            if (results.rows.length >= 1) {
-              setEmpty(false);
-            } else {
-              setEmpty(true);
-            }
-          },
-        );
-      });
+      let tableId = route.params.id;
+      sqlQuery(
+        'SELECT * FROM ORD JOIN Product ON ORD.product_id=Product.id WHERE localtable_id=?;',
+        setItems,
+        tableId,
+      );
     }
   }, [isVisible, items]);
 
@@ -343,7 +293,6 @@ function TableScreen({navigation, route}) {
 
 function AddProductToTableScreen({navigation, route}) {
   const [products, setProducts] = useState([]);
-  const [empty, setEmpty] = useState([]);
   const [newAmount, setNewAmount] = useState(1);
   const [orders, setOrders] = useState([]);
 
@@ -361,32 +310,12 @@ function AddProductToTableScreen({navigation, route}) {
 
   //SQL GET ALL PRODUCTS
   useEffect(() => {
-    db.transaction(tx => {
-      tx.executeSql('SELECT * FROM Product', [], (tx, results) => {
-        var temp = [];
-        for (let i = 0; i < results.rows.length; ++i)
-          temp.push(results.rows.item(i));
-        setProducts(temp);
-
-        if (results.rows.length >= 1) {
-          setEmpty(false);
-        } else {
-          setEmpty(true);
-        }
-      });
-    });
+    sqlQuery('SELECT * FROM Product', setProducts);
   }, []);
 
   //SQL GET ALL ORDERS
   useEffect(() => {
-    db.transaction(function (tx) {
-      tx.executeSql('SELECT * FROM ORD', [], (tx, results) => {
-        var temp = [];
-        for (let i = 0; i < results.rows.length; ++i)
-          temp.push(results.rows.item(i));
-        setOrders(temp);
-      });
-    });
+    sqlQuery('SELECT * FROM ORD', setOrders);
   }, []);
 
   function HandleAddProductToTableButton(productId, localTableId, newAmount) {
@@ -403,26 +332,21 @@ function AddProductToTableScreen({navigation, route}) {
     }
 
     if (!isAlreadyAdded) {
-      db.transaction(function (tx) {
-        tx.executeSql(
-          'INSERT INTO ORD (localtable_id, product_id, amount) VALUES (?,?,?)',
-          [localTableId, productId, newAmount],
-          (tx, results) => {},
-        );
-      });
+      sqlQuery(
+        'INSERT INTO ORD (localtable_id, product_id, amount) VALUES (?,?,?)',
+        null,
+        localTableId,
+        productId,
+        newAmount,
+      );
     } else {
-      db.transaction(function (tx) {
-        tx.executeSql(
-          'UPDATE ORD SET amount=? WHERE localtable_id=? AND product_id=?',
-          [parseInt(oldAmount + newAmount, 10), localTableId, productId],
-          (tx, results) => {
-            console.log('Results', results.rowsAffected);
-            if (results.rowsAffected > 0) {
-              Alert.alert('Rendelés hozzáadva: ' + productName);
-            } else Alert.alert('Sikertelen hozzáadás');
-          },
-        );
-      });
+      sqlQuery(
+        'UPDATE ORD SET amount=? WHERE localtable_id=? AND product_id=?',
+        null,
+        parseInt(oldAmount + newAmount, 10),
+        localTableId,
+        productId,
+      );
     }
     navigation.navigate('TableScreen', {id: route.params.tableId});
   }
@@ -485,26 +409,11 @@ function AddProductToTableScreen({navigation, route}) {
 
 function AllProductScreen({navigation}) {
   const [items, setItems] = useState([]);
-  const [empty, setEmpty] = useState([]);
 
   const isVisible = useIsFocused();
 
-  // SQL QUERY
   useEffect(() => {
-    db.transaction(tx => {
-      tx.executeSql('SELECT * FROM Product', [], (tx, results) => {
-        var temp = [];
-        for (let i = 0; i < results.rows.length; ++i)
-          temp.push(results.rows.item(i));
-        setItems(temp);
-
-        if (results.rows.length >= 1) {
-          setEmpty(false);
-        } else {
-          setEmpty(true);
-        }
-      });
-    });
+    sqlQuery('SELECT * FROM Product', setItems);
   }, [isVisible]);
 
   const renderAllProductItem = ({item}) => {
@@ -569,20 +478,15 @@ function AddProductToInventoryScreen({navigation}) {
         'A megadott adatok nem megfelelőek! \nTermék név min. 3 BETŰ, az áraknak pedig SZÁMNAK kell lennie!',
       );
     } else {
-      db.transaction(function (tx) {
-        tx.executeSql(
-          'INSERT INTO Product (name, eur, huf) VALUES (?,?,?)',
-          [productName, productEur, productHuf],
-          (tx, results) => {
-            console.log('Results', results.rowsAffected);
-            if (results.rowsAffected > 0) {
-              Alert.alert('Termék hozzáadva: ' + productName);
-            } else Alert.alert('Sikertelen hozzáadás');
-          },
-        );
-      });
+      sqlQuery(
+        'INSERT INTO Product (name, eur, huf) VALUES (?,?,?)',
+        null,
+        productName,
+        productEur,
+        productHuf,
+      );
+      navigation.navigate('AllProductScreen');
     }
-    navigation.navigate('AllProductScreen');
   }
 
   return (
@@ -622,18 +526,7 @@ function EditProductInInventoryScreen({navigation, route}) {
   }
 
   function handleDeleteItem(productId) {
-    db.transaction(function (tx) {
-      tx.executeSql(
-        'DELETE FROM Product WHERE id=?;',
-        [productId],
-        (tx, results) => {
-          console.log('Results', results.rowsAffected);
-          if (results.rowsAffected > 0) {
-            Alert.alert('Termék törölve: ' + productName);
-          } else Alert.alert('Sikertelen törlés');
-        },
-      );
-    });
+    +sqlQuery('DELETE FROM Product WHERE id=?;', null, productId);
     navigation.navigate('AllProductScreen');
   }
 
@@ -710,18 +603,10 @@ function OrderHistoryScreen({navigation}) {
   //SQL GET ALL distinct dates
   useEffect(() => {
     if (isVisible) {
-      db.transaction(tx => {
-        tx.executeSql(
-          'SELECT DISTINCT order_date FROM CompletedOrder ORDER BY order_date',
-          [],
-          (tx, results) => {
-            var temp = [];
-            for (let i = 0; i < results.rows.length; ++i)
-              temp.push(results.rows.item(i));
-            setDistinctDates(temp);
-          },
-        );
-      });
+      sqlQuery(
+        'SELECT DISTINCT order_date FROM CompletedOrder ORDER BY order_date',
+        setDistinctDates,
+      );
     }
   }, [isVisible]);
 
@@ -763,18 +648,12 @@ function CompletedOrder({navigation, route}) {
   //SQL GET ALL completed orders
   useEffect(() => {
     if (isVisible) {
-      db.transaction(tx => {
-        tx.executeSql(
-          'SELECT * FROM CompletedOrder WHERE order_date=?',
-          [route.params.date],
-          (tx, results) => {
-            var temp = [];
-            for (let i = 0; i < results.rows.length; ++i)
-              temp.push(results.rows.item(i));
-            setCompletedOrders(temp);
-          },
-        );
-      });
+      let currentDate = route.params.date;
+      sqlQuery(
+        'SELECT * FROM CompletedOrder WHERE order_date=?',
+        setCompletedOrders,
+        currentDate,
+      );
     }
   }, [isVisible, completedOrders]);
 
@@ -919,10 +798,5 @@ function CompletedOrder({navigation, route}) {
     </View>
   );
 }
-//SCREENS END
-
-//STYLES
-
-//STYLES END
 
 export default App;
