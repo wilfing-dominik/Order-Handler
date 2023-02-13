@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Button, TextInput} from 'react-native';
+import {View, Button, TextInput, Alert} from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 
 export default AddProductToInventoryScreen = ({navigation}) => {
@@ -21,8 +21,9 @@ export default AddProductToInventoryScreen = ({navigation}) => {
       !isNumber(productHuf) ||
       !isNumber(productEur)
     ) {
-      alert(
-        'A megadott adatok nem megfelelőek! \nTermék név min. 3 BETŰ, az áraknak pedig SZÁMNAK kell lennie!',
+      Alert.alert(
+        'A megadott adatok nem megfelelőek!',
+        '\n-Termék név min. 3 BETŰ \n\n-Az áraknak SZÁMNAK kell lennie!',
       );
     } else {
       sqlQuery(
