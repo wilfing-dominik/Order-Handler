@@ -10,8 +10,10 @@ var RNFS = require('react-native-fs');
 export default CompletedOrder = ({navigation, route}) => {
   const [completedOrders, setCompletedOrders] = useState([]);
 
-  navigation.setOptions({
-    title: route.params.date + ' fizetett rendelései',
+  useEffect(() => {
+    navigation.setOptions({
+      title: route.params.date + ' fizetett rendelései',
+    });
   });
 
   let isVisible = useIsFocused();

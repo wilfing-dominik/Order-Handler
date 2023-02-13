@@ -13,8 +13,10 @@ export default AddProductToTableScreen = ({navigation, route}) => {
   const [newAmount, setNewAmount] = useState(1);
   const [orders, setOrders] = useState([]);
 
-  navigation.setOptions({
-    title: 'Új tétel hozzáadása (Asztal ' + route.params.tableId + ')',
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Új tétel hozzáadása (Asztal ' + route.params.tableId + ')',
+    });
   });
 
   function handlePressIncreaseAmount() {
