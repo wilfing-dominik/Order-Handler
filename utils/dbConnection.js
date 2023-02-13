@@ -16,8 +16,8 @@ let openDB = dbName => {
 
 let db = openDB('order-handler-db.db');
 
-export const sqlQuery = (query, setter, ...data) => {
-  db.transaction(tx => {
+export async function sqlQuery(query, setter, ...data) {
+  await db.transaction(async tx => {
     tx.executeSql(query, [...data], (tx, results) => {
       if (setter) {
         let temp = [];
@@ -25,10 +25,11 @@ export const sqlQuery = (query, setter, ...data) => {
           temp.push(results.rows.item(i));
         setter(temp);
       } else {
-        if (results.rowsAffected > 0) {
-          return 1;
-        } else return -1;
+        if (results.rowsAffected > 0) alert('Sikeres művelet');
+        else {
+          alert('Hiba a művelet elvégzésekor');
+        }
       }
     });
   });
-};
+}
