@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, View, Button} from 'react-native';
+import {Text, View, Button, TextInput} from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 
 export default EditProductInInventoryScreen = ({navigation, route}) => {
