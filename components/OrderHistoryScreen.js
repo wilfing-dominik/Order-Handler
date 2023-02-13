@@ -18,7 +18,7 @@ export default OrderHistoryScreen = ({navigation}) => {
     }
   }, [isVisible]);
 
-  const renderOrderItem = ({item}) => {
+  const renderOrder = ({item}) => {
     return (
       <TouchableOpacity
         style={styles.TableItem}
@@ -36,9 +36,9 @@ export default OrderHistoryScreen = ({navigation}) => {
     <View>
       <FlatList
         data={distinctDates}
-        renderItem={renderOrderItem}
-        keyExtractor={orderDates => orderDates.id}
-        numColumns={1}
+        renderItem={renderOrder}
+        keyExtractor={item => item.order_date}
+        numColumns="1"
       />
     </View>
   );
