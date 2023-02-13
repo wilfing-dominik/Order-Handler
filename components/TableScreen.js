@@ -8,8 +8,11 @@ export default TableScreen = ({navigation, route}) => {
 
   const isVisible = useIsFocused();
 
-  navigation.setOptions({
-    title: `Asztal ` + route.params.id,
+  // Update screen title with table number
+  useEffect(() => {
+    navigation.setOptions({
+      title: `Asztal ` + route.params.id,
+    });
   });
 
   useEffect(() => {
@@ -42,7 +45,6 @@ export default TableScreen = ({navigation, route}) => {
     }
 
     sqlQuery('DELETE FROM ORD WHERE localtable_id=?;', null, localTableId);
-    alert('Fizetve!');
     navigation.navigate('HomeScreen');
   }
 
