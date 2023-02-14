@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {
   Text,
-  Button,
   SafeAreaView,
   FlatList,
   TouchableOpacity,
