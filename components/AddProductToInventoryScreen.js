@@ -7,6 +7,8 @@ export default AddProductToInventoryScreen = ({navigation}) => {
   const [productEur, setProductEur] = useState('');
   const [productHuf, setProductHuf] = useState('');
 
+  let placeholderTextColor = '#2b2b28';
+
   function isNumber(str) {
     if (str.trim() === '') {
       return false;
@@ -23,7 +25,7 @@ export default AddProductToInventoryScreen = ({navigation}) => {
     ) {
       Alert.alert(
         'A megadott adatok nem megfelelőek!',
-        '\n-Termék név min. 3 BETŰ \n\n-Az áraknak SZÁMNAK kell lennie!',
+        '\n- Termék név min. 3 BETŰ \n\n- Az áraknak SZÁMNAK kell lennie!',
       );
     } else {
       sqlQuery(
@@ -42,20 +44,22 @@ export default AddProductToInventoryScreen = ({navigation}) => {
       <View>
         <TextInput
           placeholder="Termék név"
-          placeholderTextColor="#2b2b28"
+          placeholderTextColor={placeholderTextColor}
           style={[styles.Font, styles.Input]}
           onChangeText={productName => setProductName(productName)}></TextInput>
         <TextInput
           placeholder="Ár euróban"
-          placeholderTextColor="#2b2b28"
+          placeholderTextColor={placeholderTextColor}
           style={[styles.Font, styles.Input]}
           onChangeText={productEur => setProductEur(productEur)}></TextInput>
+
         <TextInput
           placeholder="Ár forintban"
-          placeholderTextColor="#2b2b28"
+          placeholderTextColor={placeholderTextColor}
           style={[styles.Font, styles.Input]}
           onChangeText={productHuf => setProductHuf(productHuf)}></TextInput>
       </View>
+
       <Button title="Hozzáadás" onPress={() => handleAddProductToInventory()} />
     </View>
   );

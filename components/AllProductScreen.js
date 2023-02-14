@@ -19,7 +19,7 @@ export default AllProductScreen = ({navigation}) => {
     sqlQuery('SELECT * FROM Product', setItems);
   }, [isVisible]);
 
-  const renderAllProductItem = ({item}) => {
+  const ProductItem = ({item}) => {
     const backgroundColor = '#66c2ff';
 
     return (
@@ -40,6 +40,10 @@ export default AllProductScreen = ({navigation}) => {
     );
   };
 
+  const renderProductItem = ({item}) => {
+    return <ProductItem item={item} />;
+  };
+
   return (
     <View style={styles.AllProductContainer}>
       <SafeAreaView style={styles.AllProductListContainer}>
@@ -47,7 +51,7 @@ export default AllProductScreen = ({navigation}) => {
           numColumns={1}
           keyExtractor={item => item.id}
           data={items}
-          renderItem={renderAllProductItem}
+          renderItem={renderProductItem}
         />
       </SafeAreaView>
       <Button

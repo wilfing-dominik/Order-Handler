@@ -82,7 +82,6 @@ export default AddProductToTableScreen = ({navigation, route}) => {
 
   const renderProductItem = ({item}) => {
     const backgroundColor = '#66c2ff';
-    const color = 'black';
 
     return (
       <ProductItem
@@ -105,7 +104,7 @@ export default AddProductToTableScreen = ({navigation, route}) => {
         data={products}
         renderItem={renderProductItem}
         keyExtractor={item => item.id}
-        numColumns={2}
+        numColumns="2"
       />
 
       <Text style={styles.Font}>Darab: {newAmount}</Text>

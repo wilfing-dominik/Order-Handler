@@ -27,7 +27,7 @@ export default EditProductInInventoryScreen = ({navigation, route}) => {
     ) {
       Alert.alert(
         'A megadott adatok nem megfelelőek!',
-        '\n-Termék név min. 3 BETŰ \n\n-Az áraknak SZÁMNAK kell lennie!',
+        '\n- Termék név min. 3 BETŰ \n\n- Az áraknak SZÁMNAK kell lennie!',
       );
     } else {
       sqlQuery(
