@@ -23,7 +23,7 @@ const App = () => {
         <Stack.Screen
           name="HomeScreen"
           component={HomeScreen}
-          options={{title: 'Összes asztal'}}></Stack.Screen>
+          options={{title: 'Összes asztal', headerShown: false}}></Stack.Screen>
 
         <Stack.Screen
           name="TableScreen"

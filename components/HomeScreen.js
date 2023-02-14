@@ -50,7 +50,7 @@ export default HomeScreen = ({navigation}) => {
 
   const Table = ({item, onPress}) => (
     <TouchableOpacity style={styles.table} onPress={onPress}>
-      <Text>{item.name}</Text>
+      <Text style={styles.tableNameText}>{item.name}</Text>
       <Text>{tableSum[item.id - 1]} Ft</Text>
     </TouchableOpacity>
   );
@@ -66,24 +66,29 @@ export default HomeScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.screenContainer}>
+      <View style={styles.topMenu}>
+        <Text style={styles.topMenuText}>Order Handler</Text>
+      </View>
+
       <FlatList
         data={items}
         renderItem={renderTable}
         keyExtractor={item => item.id}
-        numColumns="2"
+        numColumns="3"
         contentContainerStyle={styles.tableList}
       />
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           onPress={() => navigation.navigate('AllProductScreen')}
           style={styles.button}>
-          <Text>Terméklista</Text>
+          <Text style={styles.buttonText}>Terméklista</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => navigation.navigate('OrderHistory')}
           style={styles.button}>
-          <Text>Rendeléstörténet</Text>
+          <Text style={styles.buttonText}>Rendeléstörténet</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -92,12 +97,50 @@ export default HomeScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   screenContainer: {
-    // flex: 1,
+    // backgroundColor: 'white',
+    flex: 1,
+    alignItems: 'center',
   },
   tableList: {
-    // alignItems: 'center',
+    marginVertical: 15,
   },
-  table: {},
-  buttonContainer: {},
-  button: {},
+  table: {
+    backgroundColor: 'lightblue',
+    margin: 8,
+    padding: 5,
+    height: 80,
+    width: 120,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+  },
+  buttonContainer: {
+    backgroundColor: '#2b2b28',
+    flexDirection: 'row',
+    paddingVertical: 10,
+    justifyContent: 'space-evenly',
+    width: '100%',
+  },
+  button: {
+    borderRadius: 4,
+  },
+  tableNameText: {
+    color: 'black',
+    fontWeight: '600',
+  },
+  buttonText: {
+    color: 'white',
+  },
+  boldText: {},
+  topMenu: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: '#2b2b28',
+    width: '100%',
+  },
+  topMenuText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '600',
+  },
 });
