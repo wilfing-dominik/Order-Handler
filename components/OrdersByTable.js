@@ -11,7 +11,7 @@ export default OrdersByTable = ({navigation, route}) => {
   // Update screen title with table number
   useEffect(() => {
     navigation.setOptions({
-      title: `Asztal ` + route.params.id,
+      title: route.params.name,
     });
   });
 
