@@ -45,17 +45,18 @@ export default OrdersByTable = ({navigation, route}) => {
     }
 
     sqlQuery('DELETE FROM ORD WHERE localtable_id=?;', null, localTableId);
-    navigation.navigate('HomeScreen');
+    navigation.navigate('Home');
   }
 
   function deleteOrder(orderId, amount) {
     // TODO
     if (amount > 1) {
+      let tableId = route.params.id;
       sqlQuery(
         'UPDATE ORD SET amount=? WHERE localtable_id=? AND product_id=?',
         null,
         amount - 1,
-        route.params.tableId,
+        tableId,
         orderId,
       );
     } else {
@@ -121,7 +122,7 @@ export default OrdersByTable = ({navigation, route}) => {
         />
         <Button
           title="Fizetett"
-          onPress={() => handleTablePay(route.params.tableId)}
+          onPress={() => handleTablePay(route.params.id)}
         />
       </View>
     </View>
