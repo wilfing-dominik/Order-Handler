@@ -25,7 +25,7 @@ export default AllProduct = ({navigation}) => {
     return (
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('EditProductInInventory', {
+          navigation.navigate('EditProduct', {
             id: item.id,
             name: item.name,
             eur: item.eur,
@@ -56,7 +56,7 @@ export default AllProduct = ({navigation}) => {
       </SafeAreaView>
       <Button
         title="Új termék hozzáadása"
-        onPress={() => navigation.navigate('AddProductToInventory')}
+        onPress={() => navigation.navigate('AddProduct')}
       />
     </View>
   );

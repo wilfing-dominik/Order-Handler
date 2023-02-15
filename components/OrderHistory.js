@@ -23,7 +23,7 @@ export default OrderHistory = ({navigation}) => {
       <TouchableOpacity
         style={styles.TableItem}
         onPress={() =>
-          navigation.navigate('CompletedOrderScreen', {date: item.order_date})
+          navigation.navigate('CompletedOrder', {date: item.order_date})
         }>
         <Text style={{fontWeight: 'bold', fontSize: 18}}>
           {item.order_date}

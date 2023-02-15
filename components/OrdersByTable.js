@@ -113,7 +113,7 @@ export default OrdersByTable = ({navigation, route}) => {
         <Button
           title="Új tétel"
           onPress={() =>
-            navigation.navigate('AddProductToTableScreen', {
+            navigation.navigate('AddProduct', {
               tableId: route.params.id,
             })
           }
