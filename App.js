@@ -1,17 +1,18 @@
-import React from 'react';
+import React, {Button} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import './styles/style';
 
 //COMPONENTS
-import HomeScreen from './components/Home';
-import TableScreen from './components/OrdersByTable';
-import AddProductToInventoryScreen from './components/AddProduct';
-import AddProductToTableScreen from './components/AddOrder';
-import AllProductScreen from './components/AllProduct';
+import Home from './components/Home';
+import AddTable from './components/AddTable';
+import OrdersByTable from './components/OrdersByTable';
+import AddProduct from './components/AddProduct';
+import AddOrder from './components/AddOrder';
+import AllProduct from './components/AllProduct';
 import CompletedOrder from './components/CompletedOrder';
-import EditProductInInventoryScreen from './components/EditProduct';
-import OrderHistoryScreen from './components/OrderHistory';
+import EditProduct from './components/EditProduct';
+import OrderHistory from './components/OrderHistory';
 
 // GLOBALS
 const Stack = createNativeStackNavigator();
@@ -21,42 +22,47 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-          options={{title: 'Összes asztal', headerShown: false}}></Stack.Screen>
+          name="Home"
+          component={Home}
+          options={{
+            title: 'Összes asztal',
+            headerShown: false,
+          }}></Stack.Screen>
+
+        <Stack.Screen name="AddTable" component={AddTable}></Stack.Screen>
 
         <Stack.Screen
-          name="TableScreen"
-          component={TableScreen}
+          name="OrdersByTable"
+          component={OrdersByTable}
           options={{title: 'Asztal ?'}}></Stack.Screen>
 
         <Stack.Screen
-          name="AddProductToTableScreen"
-          component={AddProductToTableScreen}
+          name="AddOrder"
+          component={AddOrder}
           options={{title: 'Új rendelés hozzáadása (Asztal x)'}}></Stack.Screen>
 
         <Stack.Screen
-          name="AllProductScreen"
-          component={AllProductScreen}
+          name="AllProduct"
+          component={AllProduct}
           options={{title: 'Összes termék'}}></Stack.Screen>
 
         <Stack.Screen
-          name="AddProductToInventory"
-          component={AddProductToInventoryScreen}
+          name="AddProduct"
+          component={AddProduct}
           options={{title: 'Új termék hozzáadása'}}></Stack.Screen>
 
         <Stack.Screen
-          name="EditProductInInventory"
-          component={EditProductInInventoryScreen}
+          name="EditProduct"
+          component={EditProduct}
           options={{title: 'Termék adatainak változtatása'}}></Stack.Screen>
 
         <Stack.Screen
           name="OrderHistory"
-          component={OrderHistoryScreen}
+          component={OrderHistory}
           options={{title: 'Rendeléstörténet'}}></Stack.Screen>
 
         <Stack.Screen
-          name="CompletedOrderScreen"
+          name="CompletedOrder"
           component={CompletedOrder}
           options={{title: 'Rendelések ? dátum alatt'}}></Stack.Screen>
       </Stack.Navigator>

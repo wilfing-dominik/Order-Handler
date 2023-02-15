@@ -58,7 +58,7 @@ export default Home = ({navigation}) => {
     return (
       <Table
         item={item}
-        onPress={() => navigation.navigate('TableScreen', {id: item.id})}
+        onPress={() => navigation.navigate('OrdersByTable', {name: item.name})}
       />
     );
   };
@@ -67,6 +67,9 @@ export default Home = ({navigation}) => {
     <SafeAreaView style={styles.screenContainer}>
       <View style={styles.topMenu}>
         <Text style={styles.topMenuText}>Order Handler</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('AddTable')}>
+          <Text style={styles.topMenuText}>+</Text>
+        </TouchableOpacity>
       </View>
 
       <FlatList
