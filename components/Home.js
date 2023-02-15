@@ -79,7 +79,7 @@ export default Home = ({navigation}) => {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('AllProductScreen')}
+          onPress={() => navigation.navigate('AllProduct')}
           style={styles.button}>
           <Text style={styles.buttonText}>Terméklista</Text>
         </TouchableOpacity>
