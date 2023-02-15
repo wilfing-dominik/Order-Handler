@@ -28,7 +28,7 @@ export default CompletedOrder = ({navigation, route}) => {
         currentDate,
       );
     }
-  }, [isVisible, completedOrders]);
+  }, [isVisible, completedOrders, route.params.date]);
 
   const handleClick = async () => {
     try {

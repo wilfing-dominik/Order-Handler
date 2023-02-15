@@ -14,7 +14,8 @@ export default Add = () => {
       <TextInput
         onChangeText={newTableName => setTableName(newTableName)}
         placeholder={'Asztal neve'}
-        placeholderTextColor="#2b2b28"></TextInput>
+        placeholderTextColor="#2b2b28"
+      />
 
       <TouchableOpacity onPress={() => addNewTable()}>
         <Text>Hozzáadás</Text>

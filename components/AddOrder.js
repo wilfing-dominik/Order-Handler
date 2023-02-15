@@ -20,11 +20,15 @@ export default AddOrder = ({navigation, route}) => {
   });
 
   function handlePressIncreaseAmount() {
-    if (newAmount + 1 <= 99) setNewAmount(newAmount + 1);
+    if (newAmount + 1 <= 99) {
+      setNewAmount(newAmount + 1);
+    }
   }
 
   function handlePressDecreaseAmount() {
-    if (newAmount - 1 > 0) setNewAmount(newAmount - 1);
+    if (newAmount - 1 > 0) {
+      setNewAmount(newAmount - 1);
+    }
   }
 
   //SQL GET ALL PRODUCTS

@@ -51,21 +51,24 @@ export default EditProduct = ({navigation, route}) => {
         style={styles.Font}
         onChangeText={productName => setProductName(productName)}
         placeholder={route.params.name}
-        placeholderTextColor="#2b2b28"></TextInput>
+        placeholderTextColor="#2b2b28"
+      />
 
       <Text style={styles.Font}>Forint:</Text>
       <TextInput
         style={styles.Font}
         onChangeText={productHuf => setProductHuf(productHuf)}
         placeholder={String(route.params.huf)}
-        placeholderTextColor="#2b2b28"></TextInput>
+        placeholderTextColor="#2b2b28"
+      />
 
       <Text style={styles.Font}>Euró:</Text>
       <TextInput
         style={styles.Font}
         onChangeText={productEur => setProductEur(productEur)}
         placeholder={String(route.params.eur)}
-        placeholderTextColor="#2b2b28"></TextInput>
+        placeholderTextColor="#2b2b28"
+      />
 
       <Button
         title="Adatok módosítása"

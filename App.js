@@ -27,44 +27,52 @@ const App = () => {
           options={{
             title: 'Összes asztal',
             headerShown: false,
-          }}></Stack.Screen>
+          }}
+        />
 
-        <Stack.Screen name="AddTable" component={AddTable}></Stack.Screen>
+        <Stack.Screen name="AddTable" component={AddTable} />
 
         <Stack.Screen
           name="OrdersByTable"
           component={OrdersByTable}
-          options={{title: 'Asztal ?'}}></Stack.Screen>
+          options={{title: 'Asztal ?'}}
+        />
 
         <Stack.Screen
           name="AddOrder"
           component={AddOrder}
-          options={{title: 'Új rendelés hozzáadása (Asztal x)'}}></Stack.Screen>
+          options={{title: 'Új rendelés hozzáadása (Asztal x)'}}
+        />
 
         <Stack.Screen
           name="AllProduct"
           component={AllProduct}
-          options={{title: 'Összes termék'}}></Stack.Screen>
+          options={{title: 'Összes termék'}}
+        />
 
         <Stack.Screen
           name="AddProduct"
           component={AddProduct}
-          options={{title: 'Új termék hozzáadása'}}></Stack.Screen>
+          options={{title: 'Új termék hozzáadása'}}
+        />
 
         <Stack.Screen
           name="EditProduct"
           component={EditProduct}
-          options={{title: 'Termék adatainak változtatása'}}></Stack.Screen>
+          options={{title: 'Termék adatainak változtatása'}}
+        />
 
         <Stack.Screen
           name="OrderHistory"
           component={OrderHistory}
-          options={{title: 'Rendeléstörténet'}}></Stack.Screen>
+          options={{title: 'Rendeléstörténet'}}
+        />
 
         <Stack.Screen
           name="CompletedOrder"
           component={CompletedOrder}
-          options={{title: 'Rendelések ? dátum alatt'}}></Stack.Screen>
+          options={{title: 'Rendelések ? dátum alatt'}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

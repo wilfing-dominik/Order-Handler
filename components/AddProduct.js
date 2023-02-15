@@ -46,18 +46,21 @@ export default AddProduct = ({navigation}) => {
           placeholder="Termék név"
           placeholderTextColor={placeholderTextColor}
           style={[styles.Font, styles.Input]}
-          onChangeText={productName => setProductName(productName)}></TextInput>
+          onChangeText={productName => setProductName(productName)}
+        />
         <TextInput
           placeholder="Ár euróban"
           placeholderTextColor={placeholderTextColor}
           style={[styles.Font, styles.Input]}
-          onChangeText={productEur => setProductEur(productEur)}></TextInput>
+          onChangeText={productEur => setProductEur(productEur)}
+        />
 
         <TextInput
           placeholder="Ár forintban"
           placeholderTextColor={placeholderTextColor}
           style={[styles.Font, styles.Input]}
-          onChangeText={productHuf => setProductHuf(productHuf)}></TextInput>
+          onChangeText={productHuf => setProductHuf(productHuf)}
+        />
       </View>
 
       <Button title="Hozzáadás" onPress={() => handleAddProductToInventory()} />
