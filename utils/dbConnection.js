@@ -21,8 +21,9 @@ export async function sqlQuery(query, setter, ...data) {
     tx.executeSql(query, [...data], (tx, results) => {
       if (setter) {
         let temp = [];
-        for (let i = 0; i < results.rows.length; ++i)
+        for (let i = 0; i < results.rows.length; ++i) {
           temp.push(results.rows.item(i));
+        }
         setter(temp);
       } else {
         // if (results.rowsAffected > 0) alert('Sikeres művelet');
