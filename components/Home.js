@@ -58,7 +58,12 @@ export default Home = ({navigation}) => {
     return (
       <Table
         item={item}
-        onPress={() => navigation.navigate('OrdersByTable', {name: item.name})}
+        onPress={() =>
+          navigation.navigate('OrdersByTable', {
+            name: item.name,
+            id: item.id,
+          })
+        }
       />
     );
   };

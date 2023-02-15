@@ -15,7 +15,7 @@ export default AddOrder = ({navigation, route}) => {
 
   useEffect(() => {
     navigation.setOptions({
-      title: 'Új tétel hozzáadása (Asztal ' + route.params.tableId + ')',
+      title: 'Új tétel hozzáadása (' + route.params.name + ')',
     });
   });
 
@@ -67,7 +67,7 @@ export default AddOrder = ({navigation, route}) => {
         productId,
       );
     }
-    navigation.navigate('TableScreen', {id: route.params.tableId});
+    navigation.navigate('OrdersByTable', {id: route.params.tableId});
   }
 
   const ProductItem = ({item, onPress, backgroundColor}) => (

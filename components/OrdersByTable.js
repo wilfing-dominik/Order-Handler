@@ -55,7 +55,7 @@ export default OrdersByTable = ({navigation, route}) => {
         'UPDATE ORD SET amount=? WHERE localtable_id=? AND product_id=?',
         null,
         amount - 1,
-        route.params.id,
+        route.params.tableId,
         orderId,
       );
     } else {
@@ -114,13 +114,14 @@ export default OrdersByTable = ({navigation, route}) => {
           title="Új tétel"
           onPress={() =>
             navigation.navigate('AddOrder', {
+              name: route.params.name,
               tableId: route.params.id,
             })
           }
         />
         <Button
           title="Fizetett"
-          onPress={() => handleTablePay(route.params.id)}
+          onPress={() => handleTablePay(route.params.tableId)}
         />
       </View>
     </View>
