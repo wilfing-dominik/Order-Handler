@@ -16,7 +16,7 @@ export default EditProduct = ({navigation, route}) => {
 
   function handleDeleteItem(productId) {
     +sqlQuery('DELETE FROM Product WHERE id=?;', null, productId);
-    navigation.navigate('AllProductScreen');
+    navigation.navigate('AllProduct');
   }
 
   function handleEditItem(productId, productName, productEur, productHuf) {
