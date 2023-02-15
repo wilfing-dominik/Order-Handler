@@ -10,10 +10,16 @@ import {
 } from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 
+// Components
+import CustomModal from './CustomModal';
+
 export default Home = ({navigation}) => {
   const [items, setItems] = useState([]);
   const [orders, setOrders] = useState([]);
   const [tableSum, setTableSum] = useState([]);
+
+  const [addTableModalOpen, setAddTableModalOpen] = useState(false);
+  const [forceRefresh, setForceRefresh] = useState(false);
 
   const isVisible = useIsFocused();
 
@@ -44,8 +50,11 @@ export default Home = ({navigation}) => {
 
   // SQL GET ALL TABLES
   useEffect(() => {
-    sqlQuery('SELECT * FROM LocalTable', setItems);
-  }, [isVisible]);
+    if (isVisible) {
+      sqlQuery('SELECT * FROM LocalTable', setItems);
+      setForceRefresh(false);
+    }
+  }, [isVisible, forceRefresh]);
 
   const Table = ({item, onPress}) => (
     <TouchableOpacity style={styles.table} onPress={onPress}>
@@ -72,9 +81,16 @@ export default Home = ({navigation}) => {
     <SafeAreaView style={styles.screenContainer}>
       <View style={styles.topMenu}>
         <Text style={styles.topMenuText}>Order Handler</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('AddTable')}>
+        <TouchableOpacity onPress={() => setAddTableModalOpen(true)}>
           <Text style={styles.topMenuText}>+</Text>
         </TouchableOpacity>
+
+        {addTableModalOpen && (
+          <CustomModal
+            setAddTableModalOpen={setAddTableModalOpen}
+            setForceRefresh={setForceRefresh}
+          />
+        )}
       </View>
 
       <FlatList
