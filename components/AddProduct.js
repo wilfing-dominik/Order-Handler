@@ -35,7 +35,7 @@ export default AddProduct = ({navigation}) => {
         productEur,
         productHuf,
       );
-      navigation.navigate('AllProductScreen');
+      navigation.navigate('AllProduct');
     }
   }
 
