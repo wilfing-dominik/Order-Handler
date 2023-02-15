@@ -38,7 +38,7 @@ export default EditProduct = ({navigation, route}) => {
         productHuf,
         productId,
       );
-      navigation.navigate('HomeScreen');
+      navigation.navigate('Home');
     }
   }
 
