@@ -120,7 +120,7 @@ export default Home = ({navigation}) => {
 
 const styles = StyleSheet.create({
   screenContainer: {
-    // backgroundColor: 'white',
+    backgroundColor: '#464646',
     flex: 1,
     alignItems: 'center',
   },
