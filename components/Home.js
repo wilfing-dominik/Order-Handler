@@ -59,7 +59,9 @@ export default Home = ({navigation}) => {
   const Table = ({item, onPress}) => (
     <TouchableOpacity style={styles.table} onPress={onPress}>
       <Text style={styles.tableNameText}>{item.name}</Text>
-      <Text>{tableSum[item.id - 1]} Ft</Text>
+      <Text>
+        {tableSum[item.id - 1] === 0 ? 'Szabad' : tableSum[item.id - 1] + 'Ft'}
+      </Text>
     </TouchableOpacity>
   );
 
