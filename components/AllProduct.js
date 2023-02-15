@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 
-export default AllProductScreen = ({navigation}) => {
+export default AllProduct = ({navigation}) => {
   const [items, setItems] = useState([]);
 
   const isVisible = useIsFocused();

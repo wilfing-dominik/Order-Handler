@@ -4,14 +4,14 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import './styles/style';
 
 //COMPONENTS
-import HomeScreen from './components/HomeScreen';
-import TableScreen from './components/TableScreen';
-import AddProductToInventoryScreen from './components/AddProductToInventoryScreen';
-import AddProductToTableScreen from './components/AddProductToTableScreen';
-import AllProductScreen from './components/AllProductScreen';
+import HomeScreen from './components/Home';
+import TableScreen from './components/OrdersByTable';
+import AddProductToInventoryScreen from './components/AddProduct';
+import AddProductToTableScreen from './components/AddOrder';
+import AllProductScreen from './components/AllProduct';
 import CompletedOrder from './components/CompletedOrder';
-import EditProductInInventoryScreen from './components/EditProductInInventoryScreen';
-import OrderHistoryScreen from './components/OrderHistoryScreen';
+import EditProductInInventoryScreen from './components/EditProduct';
+import OrderHistoryScreen from './components/OrderHistory';
 
 // GLOBALS
 const Stack = createNativeStackNavigator();

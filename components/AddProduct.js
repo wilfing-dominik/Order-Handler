@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Button, TextInput, Alert} from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 
-export default AddProductToInventoryScreen = ({navigation}) => {
+export default AddProduct = ({navigation}) => {
   const [productName, setProductName] = useState('');
   const [productEur, setProductEur] = useState('');
   const [productHuf, setProductHuf] = useState('');

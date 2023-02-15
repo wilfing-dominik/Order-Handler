@@ -3,7 +3,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {Text, View, FlatList, TouchableOpacity} from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 
-export default OrderHistoryScreen = ({navigation}) => {
+export default OrderHistory = ({navigation}) => {
   const [distinctDates, setDistinctDates] = useState([]);
 
   const isVisible = useIsFocused();

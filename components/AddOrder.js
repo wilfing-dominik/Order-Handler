@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 
-export default AddProductToTableScreen = ({navigation, route}) => {
+export default AddOrder = ({navigation, route}) => {
   const [products, setProducts] = useState([]);
   const [newAmount, setNewAmount] = useState(1);
   const [orders, setOrders] = useState([]);

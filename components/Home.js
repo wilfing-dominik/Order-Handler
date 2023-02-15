@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 
-export default HomeScreen = ({navigation}) => {
+export default Home = ({navigation}) => {
   const [items, setItems] = useState([]);
   const [orders, setOrders] = useState([]);
   const [tableSum, setTableSum] = useState([]);
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   table: {
-    backgroundColor: 'lightblue',
+    backgroundColor: '#258997',
     margin: 8,
     padding: 5,
     height: 80,
@@ -115,10 +115,13 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     backgroundColor: '#2b2b28',
+    // backgroundColor: '#258997',
     flexDirection: 'row',
     paddingVertical: 10,
+    marginVertical: 10,
     justifyContent: 'space-evenly',
-    width: '100%',
+    width: '80%',
+    borderRadius: 15,
   },
   button: {
     borderRadius: 4,

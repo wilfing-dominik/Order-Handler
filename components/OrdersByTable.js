@@ -3,7 +3,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {Text, View, Button, FlatList, TouchableOpacity} from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 
-export default TableScreen = ({navigation, route}) => {
+export default OrdersByTable = ({navigation, route}) => {
   const [items, setItems] = useState([]);
 
   const isVisible = useIsFocused();
