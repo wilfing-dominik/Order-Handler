@@ -25,10 +25,10 @@ export async function sqlQuery(query, setter, ...data) {
           temp.push(results.rows.item(i));
         setter(temp);
       } else {
-        if (results.rowsAffected > 0) alert('Sikeres művelet');
-        else {
-          alert('Hiba a művelet elvégzésekor');
-        }
+        // if (results.rowsAffected > 0) alert('Sikeres művelet');
+        // else {
+        //   alert('Hiba a művelet elvégzésekor');
+        // }
       }
     });
   });
