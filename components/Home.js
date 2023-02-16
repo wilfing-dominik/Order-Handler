@@ -59,7 +59,10 @@ export default Home = ({navigation}) => {
   const Table = ({item, onPress}) => (
     <TouchableOpacity style={styles.table} onPress={onPress}>
       <Text style={styles.tableNameText}>{item.name}</Text>
-      <Text>
+      <Text
+        style={
+          tableSum[item.id - 1] === 0 ? {color: '#3CD68C'} : {color: '#14BCB2'}
+        }>
         {tableSum[item.id - 1] === 0 ? 'Szabad' : tableSum[item.id - 1] + 'Ft'}
       </Text>
     </TouchableOpacity>
@@ -83,16 +86,12 @@ export default Home = ({navigation}) => {
     <SafeAreaView style={styles.screenContainer}>
       <View style={styles.topMenu}>
         <Text style={styles.topMenuText}>Order Handler</Text>
-        <TouchableOpacity onPress={() => setAddTableModalOpen(true)}>
-          <Text style={styles.topMenuText}>+</Text>
+        <TouchableOpacity
+          onPress={() => {
+            alert('megnyomtak!');
+          }}>
+          <Text style={styles.topMenuText}>Beállítások</Text>
         </TouchableOpacity>
-
-        {addTableModalOpen && (
-          <CustomModal
-            setAddTableModalOpen={setAddTableModalOpen}
-            setForceRefresh={setForceRefresh}
-          />
-        )}
       </View>
 
       <FlatList
@@ -103,64 +102,83 @@ export default Home = ({navigation}) => {
         contentContainerStyle={styles.tableList}
       />
 
-      <View style={styles.buttonContainer}>
+      <View style={styles.bottomMenu}>
         <TouchableOpacity
           onPress={() => navigation.navigate('AllProduct')}
           style={styles.button}>
-          <Text style={styles.buttonText}>Terméklista</Text>
+          <Text style={styles.bottomMenuText}>Terméklista</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => setAddTableModalOpen(true)}
+          style={styles.addTableButton}>
+          <Text>+</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => navigation.navigate('OrderHistory')}
           style={styles.button}>
-          <Text style={styles.buttonText}>Rendeléstörténet</Text>
+          <Text style={styles.bottomMenuText}>Rendeléstörténet</Text>
         </TouchableOpacity>
       </View>
+
+      {addTableModalOpen && (
+        <CustomModal
+          setAddTableModalOpen={setAddTableModalOpen}
+          setForceRefresh={setForceRefresh}
+        />
+      )}
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   screenContainer: {
-    backgroundColor: '#464646',
+    backgroundColor: '#323232',
     flex: 1,
     alignItems: 'center',
   },
   tableList: {
     paddingBottom: 70,
-    marginVertical: 15,
+    marginVertical: 1,
   },
   table: {
-    backgroundColor: '#258997',
+    borderWidth: 2,
+    borderColor: '#14BCB2',
+    borderRadius: 15,
+
+    backgroundColor: '#464646',
     margin: 6,
     padding: 5,
     height: 80,
     width: 120,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
   },
-  buttonContainer: {
-    backgroundColor: '#2b2b28',
-    // backgroundColor: '#258997',
+  bottomMenu: {
+    backgroundColor: '#14BCB2',
     flexDirection: 'row',
     position: 'absolute',
     bottom: 5,
-    paddingVertical: 10,
-    marginVertical: 5,
-    justifyContent: 'space-evenly',
-    width: '80%',
+    paddingVertical: 12,
+    marginVertical: 15,
+    justifyContent: 'space-between',
+    paddingLeft: 45,
+    paddingRight: 20,
+    alignItems: 'center',
+    width: '85%',
     borderRadius: 15,
   },
   button: {
     borderRadius: 4,
   },
   tableNameText: {
-    color: 'black',
+    color: '#F2F2F2',
     fontWeight: '600',
   },
-  buttonText: {
-    color: 'white',
+  bottomMenuText: {
+    color: '#383838',
+    fontWeight: '500',
   },
   boldText: {},
   topMenu: {
@@ -176,5 +194,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     fontWeight: '600',
+  },
+  addTableButton: {
+    position: 'absolute',
+    left: '57%',
+    backgroundColor: 'grey',
+    padding: 10,
+    borderRadius: 10,
   },
 });
