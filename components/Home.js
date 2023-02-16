@@ -112,7 +112,7 @@ export default Home = ({navigation}) => {
         <TouchableOpacity
           onPress={() => setAddTableModalOpen(true)}
           style={styles.addTableButton}>
-          <Text>+</Text>
+          <Text style={styles.addTableButtonText}>+</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -197,9 +197,18 @@ const styles = StyleSheet.create({
   },
   addTableButton: {
     position: 'absolute',
-    left: '57%',
-    backgroundColor: 'grey',
-    padding: 10,
-    borderRadius: 10,
+    left: '52%',
+    backgroundColor: '#464646',
+    // padding: 10,
+    width: 55,
+    height: 55,
+    borderRadius: 55 / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addTableButtonText: {
+    fontSize: 50,
+    bottom: 8,
+    color: 'lightgrey',
   },
 });
