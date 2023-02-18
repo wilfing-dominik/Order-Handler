@@ -94,7 +94,7 @@ export default Home = ({navigation}) => {
         <Text style={styles.topMenuText}>Order Handler</Text>
         <TouchableOpacity
           onPress={() => {
-            alert('megnyomtak!');
+            navigation.navigate('MainSettings');
           }}>
           <Icon name="cog" size={30} color="white" />
         </TouchableOpacity>

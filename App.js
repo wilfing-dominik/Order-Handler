@@ -1,11 +1,10 @@
-import React, {Button} from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import './styles/style';
 
 //COMPONENTS
 import Home from './components/Home';
-import AddTable from './components/AddTable';
 import OrdersByTable from './components/OrdersByTable';
 import AddProduct from './components/AddProduct';
 import AddOrder from './components/AddOrder';
@@ -13,6 +12,7 @@ import AllProduct from './components/AllProduct';
 import CompletedOrder from './components/CompletedOrder';
 import EditProduct from './components/EditProduct';
 import OrderHistory from './components/OrderHistory';
+import MainSettings from './components/MainSettings';
 
 // GLOBALS
 const Stack = createNativeStackNavigator();
@@ -30,7 +30,7 @@ const App = () => {
           }}
         />
 
-        <Stack.Screen name="AddTable" component={AddTable} />
+        <Stack.Screen name="MainSettings" component={MainSettings} />
 
         <Stack.Screen
           name="OrdersByTable"
