@@ -8,6 +8,7 @@ import {
   StyleSheet,
   View,
   Image,
+  useWindowDimensions,
 } from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -22,6 +23,15 @@ export default Home = ({navigation}) => {
 
   const [addTableModalOpen, setAddTableModalOpen] = useState(false);
   const [forceRefresh, setForceRefresh] = useState(false);
+  const {height, width} = useWindowDimensions();
+
+  const [tableColumn, setTableColumn] = useState(3);
+
+  useEffect(() => {
+    console.log(width);
+    setTableColumn(Math.round(width / 150));
+    console.log(tableColumn);
+  }, [width]);
 
   const isVisible = useIsFocused();
 
@@ -104,7 +114,8 @@ export default Home = ({navigation}) => {
         data={items}
         renderItem={renderTable}
         keyExtractor={item => item.id}
-        numColumns="3"
+        numColumns={tableColumn}
+        key={tableColumn}
         contentContainerStyle={styles.tableList}
       />
 
@@ -174,6 +185,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '85%',
     borderRadius: 15,
+    maxWidth: 450,
   },
   button: {
     borderRadius: 4,
