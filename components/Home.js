@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   View,
+  Image,
 } from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -86,6 +87,10 @@ export default Home = ({navigation}) => {
   return (
     <SafeAreaView style={styles.screenContainer}>
       <View style={styles.topMenu}>
+        <Image
+          style={{width: 60, height: 60}}
+          source={require('../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png')}
+        />
         <Text style={styles.topMenuText}>Order Handler</Text>
         <TouchableOpacity
           onPress={() => {
@@ -140,8 +145,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tableList: {
-    paddingBottom: 70,
-    marginVertical: 1,
+    paddingBottom: 100,
+    marginVertical: 16,
   },
   table: {
     borderWidth: 2,
@@ -162,7 +167,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 5,
     paddingVertical: 12,
-    marginVertical: 10,
+    marginVertical: 20,
     justifyContent: 'space-between',
     paddingLeft: 45,
     paddingRight: 20,
