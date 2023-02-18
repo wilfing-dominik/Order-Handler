@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Components
 import CustomModal from './CustomModal';
@@ -90,7 +91,7 @@ export default Home = ({navigation}) => {
           onPress={() => {
             alert('megnyomtak!');
           }}>
-          <Text style={styles.topMenuText}>Beállítások</Text>
+          <Icon name="cog" size={30} color="white" />
         </TouchableOpacity>
       </View>
 
