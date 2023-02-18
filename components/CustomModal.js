@@ -16,6 +16,7 @@ export default CustomModal = ({setAddTableModalOpen, setForceRefresh}) => {
   function handleAddNewTable() {
     sqlQuery('INSERT INTO LocalTable (name) VALUES (?)', null, newTableName);
     setForceRefresh(true);
+    setAddTableModalOpen(false);
   }
 
   return (
@@ -27,15 +28,17 @@ export default CustomModal = ({setAddTableModalOpen, setForceRefresh}) => {
             placeholder={'Asztal neve'}
             placeholderTextColor="#2b2b28"
           />
+        </SafeAreaView>
 
+        <View>
           <TouchableOpacity onPress={() => handleAddNewTable()}>
             <Text>Hozzáadás</Text>
           </TouchableOpacity>
-        </SafeAreaView>
 
-        <TouchableOpacity onPress={() => setAddTableModalOpen(false)}>
-          <Text>Close</Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => setAddTableModalOpen(false)}>
+            <Text>Close</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </Modal>
   );
