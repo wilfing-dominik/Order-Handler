@@ -1,10 +1,18 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity} from 'react-native';
 
 export default MainSettings = () => {
   return (
     <View>
-      <Text>MainSettings</Text>
+      <TextInput placeholder="Cég neve" />
+      <TouchableOpacity>
+        <Text>Módosítás</Text>
+      </TouchableOpacity>
+
+      <TextInput placeholder="Fő pénznem" />
+      <TouchableOpacity>
+        <Text>Módosítás</Text>
+      </TouchableOpacity>
     </View>
   );
 };
