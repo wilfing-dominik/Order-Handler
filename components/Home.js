@@ -24,6 +24,7 @@ export default Home = ({navigation}) => {
   const [forceRefresh, setForceRefresh] = useState(false);
   const {width} = useWindowDimensions();
   const [tableColumn, setTableColumn] = useState(3);
+  const [mainSettings, setMainSettings] = useState([]);
 
   useEffect(() => {
     console.log(width);
@@ -44,6 +45,14 @@ export default Home = ({navigation}) => {
     }
     return temp;
   };
+
+  // SQL GET MAIN SETTINGS
+  useEffect(() => {
+    if (isVisible) {
+      sqlQuery('SELECT * FROM MainSettings', setMainSettings);
+      console.log(mainSettings);
+    }
+  }, [isVisible]);
 
   // SQL GET ALL ORDERS JOINED WITH PRODUCTS
   useEffect(() => {
@@ -99,7 +108,7 @@ export default Home = ({navigation}) => {
           style={{width: 60, height: 60}}
           source={require('../android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png')}
         />
-        <Text style={styles.topMenuText}>Order Handler</Text>
+        <Text style={styles.topMenuText}>{mainSettings[0]?.value}</Text>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('MainSettings');
