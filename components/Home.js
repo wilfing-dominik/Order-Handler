@@ -20,11 +20,9 @@ export default Home = ({navigation}) => {
   const [items, setItems] = useState([]);
   const [orders, setOrders] = useState([]);
   const [tableSum, setTableSum] = useState([]);
-
   const [addTableModalOpen, setAddTableModalOpen] = useState(false);
   const [forceRefresh, setForceRefresh] = useState(false);
-  const {height, width} = useWindowDimensions();
-
+  const {width} = useWindowDimensions();
   const [tableColumn, setTableColumn] = useState(3);
 
   useEffect(() => {

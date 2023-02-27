@@ -7,11 +7,15 @@ import {
   Modal,
   TextInput,
   StyleSheet,
+  useWindowDimensions,
 } from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 
+const MODAL_HEIGHT = 250;
+
 export default CustomModal = ({setAddTableModalOpen, setForceRefresh}) => {
   const [newTableName, setNewTableName] = useState();
+  const {height: screenHeight} = useWindowDimensions();
 
   function handleAddNewTable() {
     sqlQuery('INSERT INTO LocalTable (name) VALUES (?)', null, newTableName);
@@ -20,8 +24,12 @@ export default CustomModal = ({setAddTableModalOpen, setForceRefresh}) => {
   }
 
   return (
-    <Modal transparent={true}>
-      <View style={styles.addTableModal}>
+    <Modal transparent={true} animationType="slide">
+      <View
+        style={[
+          styles.addTableModal,
+          {top: (screenHeight - MODAL_HEIGHT) / 2},
+        ]}>
         <SafeAreaView>
           <TextInput
             onChangeText={newTableName => setNewTableName(newTableName)}
@@ -46,10 +54,10 @@ export default CustomModal = ({setAddTableModalOpen, setForceRefresh}) => {
 
 const styles = StyleSheet.create({
   addTableModal: {
-    width: '100%',
-    position: 'absolute',
-    bottom: 0,
+    width: 350,
     backgroundColor: '#2b2b28',
-    height: '60%',
+    height: MODAL_HEIGHT,
+    position: 'absolute',
+    alignSelf: 'center',
   },
 });
