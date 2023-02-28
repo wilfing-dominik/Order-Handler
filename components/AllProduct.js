@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {
   Text,
@@ -9,9 +9,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
+import {mainSettingsContext} from '../App';
 
 export default AllProduct = ({navigation}) => {
   const [items, setItems] = useState([]);
+  const mainSettings = useContext(mainSettingsContext);
 
   const isVisible = useIsFocused();
 
@@ -33,7 +35,7 @@ export default AllProduct = ({navigation}) => {
         }
         style={[styles.AllProductItem, backgroundColor]}>
         <Text style={[styles.Font, styles.Title]}>
-          {item.name} {item.main_price} ?
+          {item.name} {item.main_price} {mainSettings[1]?.value}
         </Text>
       </TouchableOpacity>
     );

@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {Text, View, Button, FlatList, TouchableOpacity} from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
+import {mainSettingsContext} from '../App';
 
 export default OrdersByTable = ({navigation, route}) => {
   const [orders, setOrders] = useState([]);
+  const mainSettings = useContext(mainSettingsContext);
 
   const isVisible = useIsFocused();
 
@@ -68,7 +70,8 @@ export default OrdersByTable = ({navigation, route}) => {
         <Text style={styles.Bold}>{order.name}</Text>
 
         <Text>
-          <Text style={styles.Bold}>{order.main_price}</Text> ?
+          <Text style={styles.Bold}>{order.main_price}</Text>{' '}
+          {mainSettings[1]?.value}
         </Text>
         <Text>
           <Text style={styles.Bold}>{order.amount}</Text> DB
@@ -94,7 +97,8 @@ export default OrdersByTable = ({navigation, route}) => {
         <Text style={[styles.Font, styles.TableSum]}>
           Teljes összeg:
           <Text style={[styles.TableSum, styles.Bold, styles.TableSum]}>
-            {orders.reduce((a, v) => (a = a + v.main_price * v.amount), 0)} ?
+            {orders.reduce((a, v) => (a = a + v.main_price * v.amount), 0)}{' '}
+            {mainSettings[1]?.value}
           </Text>
         </Text>
         <FlatList

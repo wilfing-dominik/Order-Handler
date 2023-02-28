@@ -4,7 +4,7 @@ let openDB = dbName => {
   var db = SQLite.openDatabase(
     {name: dbName, createFromLocation: 1},
     () => {
-      console.log(dbName + ' opened succesfully!');
+      // console.log(dbName + ' opened succesfully!');
     },
     err => {
       console.log('Database Error: ' + err);

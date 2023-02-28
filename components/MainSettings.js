@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -7,17 +7,23 @@ import {
   StyleSheet,
 } from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
+import {updateMainSettingsContext} from '../App';
 
 export default MainSettings = () => {
   const [restaurantName, setRestaurantName] = useState('');
-  const [mainPrice, setMainPrice] = useState('');
+  const [primaryCurrency, setPrimaryCurrency] = useState('');
+  const [updateMainSettings, setUpdateMainSettings] = useContext(
+    updateMainSettingsContext,
+  );
 
   return (
     <View style={styles.container}>
       <View style={styles.settingContainer}>
         <TextInput
           style={styles.input}
-          onChangeText={restaurantName => setRestaurantName(restaurantName)}
+          onChangeText={restaurantName => {
+            setRestaurantName(restaurantName);
+          }}
           placeholder="Létesítmény neve"
         />
         <TouchableOpacity
@@ -29,6 +35,7 @@ export default MainSettings = () => {
               restaurantName,
               'restaurant_name',
             );
+            setUpdateMainSettings(true);
           }}>
           <Text>Módosítás</Text>
         </TouchableOpacity>
@@ -37,19 +44,21 @@ export default MainSettings = () => {
       <View style={styles.settingContainer}>
         <TextInput
           style={styles.input}
-          onChangeText={mainPrice => setMainPrice(mainPrice)}
+          onChangeText={mainPrice => {
+            setPrimaryCurrency(mainPrice);
+          }}
           placeholder="Fő pénznem"
         />
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            console.log(mainPrice);
             sqlQuery(
               'UPDATE MainSettings SET value=? WHERE setting_name=?',
               null,
-              mainPrice,
-              'main_price',
+              primaryCurrency,
+              'primary_currency',
             );
+            setUpdateMainSettings(true);
           }}>
           <Text>Módosítás</Text>
         </TouchableOpacity>

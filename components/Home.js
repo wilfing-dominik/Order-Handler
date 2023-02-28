@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {
   Text,
@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {mainSettingsContext} from '../App';
 
 // Components
 import CustomModal from './CustomModal';
@@ -24,15 +25,13 @@ export default Home = ({navigation}) => {
   const [forceRefresh, setForceRefresh] = useState(false);
   const {width} = useWindowDimensions();
   const [tableColumn, setTableColumn] = useState(3);
-  const [mainSettings, setMainSettings] = useState([]);
-
-  useEffect(() => {
-    console.log(width);
-    setTableColumn(Math.round(width / 150));
-    console.log(tableColumn);
-  }, [width]);
 
   const isVisible = useIsFocused();
+  const mainSettings = useContext(mainSettingsContext);
+
+  useEffect(() => {
+    setTableColumn(Math.round(width / 150));
+  }, [width]);
 
   const calculateTableSum = () => {
     let temp = new Array(items.length).fill(0);
@@ -45,14 +44,6 @@ export default Home = ({navigation}) => {
     }
     return temp;
   };
-
-  // SQL GET MAIN SETTINGS
-  useEffect(() => {
-    if (isVisible) {
-      sqlQuery('SELECT * FROM MainSettings', setMainSettings);
-      console.log(mainSettings);
-    }
-  }, [isVisible]);
 
   // SQL GET ALL ORDERS JOINED WITH PRODUCTS
   useEffect(() => {
@@ -82,7 +73,9 @@ export default Home = ({navigation}) => {
         style={
           tableSum[item.id - 1] === 0 ? {color: '#3CD68C'} : {color: '#14BCB2'}
         }>
-        {tableSum[item.id - 1] === 0 ? 'Szabad' : tableSum[item.id - 1] + 'Ft'}
+        {tableSum[item.id - 1] === 0
+          ? 'Szabad'
+          : tableSum[item.id - 1] + ' ' + mainSettings[1]?.value}
       </Text>
     </TouchableOpacity>
   );

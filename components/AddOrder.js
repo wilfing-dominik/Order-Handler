@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   View,
@@ -7,11 +7,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
+import {mainSettingsContext} from '../App';
 
 export default AddOrder = ({navigation, route}) => {
   const [products, setProducts] = useState([]);
   const [newAmount, setNewAmount] = useState(1);
   const [orders, setOrders] = useState([]);
+  const mainSettings = useContext(mainSettingsContext);
 
   useEffect(() => {
     navigation.setOptions({
@@ -79,7 +81,9 @@ export default AddOrder = ({navigation, route}) => {
       onPress={onPress}
       style={[styles.HomeItem, backgroundColor]}>
       <Text style={[styles.Title]}>{item.name}</Text>
-      <Text style={[styles.Title, styles.Bold]}>{item.main_price} ?</Text>
+      <Text style={[styles.Title, styles.Bold]}>
+        {item.main_price + ' ' + mainSettings[1]?.value}
+      </Text>
     </TouchableOpacity>
   );
 
