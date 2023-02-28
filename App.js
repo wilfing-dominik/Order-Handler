@@ -35,7 +35,9 @@ const App = () => {
           component={MainSettings}
           options={{
             headerTitle: 'Beállítások',
-            headerStyle: {backgroundColor: '#2b2b28'},
+            headerStyle: {
+              backgroundColor: '#2b2b28',
+            },
             headerTitleStyle: {color: 'white'},
             headerTintColor: 'white',
           }}
@@ -44,43 +46,92 @@ const App = () => {
         <Stack.Screen
           name="OrdersByTable"
           component={OrdersByTable}
-          options={{title: 'Asztal ?'}}
+          options={{
+            title: 'Asztal ?',
+            headerStyle: {
+              backgroundColor: '#2b2b28',
+            },
+            headerTitleStyle: {color: 'white'},
+            headerTintColor: 'white',
+          }}
         />
 
         <Stack.Screen
           name="AddOrder"
           component={AddOrder}
-          options={{title: 'Új rendelés hozzáadása (Asztal x)'}}
+          options={{
+            title: 'Új rendelés hozzáadása (Asztal x)',
+            headerStyle: {
+              backgroundColor: '#2b2b28',
+            },
+            headerTitleStyle: {color: 'white'},
+            headerTintColor: 'white',
+          }}
         />
 
         <Stack.Screen
           name="AllProduct"
           component={AllProduct}
-          options={{title: 'Összes termék'}}
+          options={{
+            title: 'Összes termék',
+            headerStyle: {
+              backgroundColor: '#2b2b28',
+            },
+            headerTitleStyle: {color: 'white'},
+            headerTintColor: 'white',
+          }}
         />
 
         <Stack.Screen
           name="AddProduct"
           component={AddProduct}
-          options={{title: 'Új termék hozzáadása'}}
+          options={{
+            title: 'Új termék hozzáadása',
+            headerStyle: {
+              backgroundColor: '#2b2b28',
+            },
+            headerTitleStyle: {color: 'white'},
+            headerTintColor: 'white',
+          }}
         />
 
         <Stack.Screen
           name="EditProduct"
           component={EditProduct}
-          options={{title: 'Termék adatainak változtatása'}}
+          options={{
+            title: 'Termék adatainak változtatása',
+            headerStyle: {
+              backgroundColor: '#2b2b28',
+            },
+            headerTitleStyle: {color: 'white'},
+            headerTintColor: 'white',
+          }}
         />
 
         <Stack.Screen
           name="OrderHistory"
           component={OrderHistory}
-          options={{title: 'Rendeléstörténet'}}
+          options={{
+            title: 'Rendeléstörténet',
+            headerStyle: {
+              backgroundColor: '#2b2b28',
+            },
+            headerTitleStyle: {color: 'white'},
+            headerTintColor: 'white',
+          }}
         />
 
         <Stack.Screen
           name="CompletedOrder"
           component={CompletedOrder}
-          options={{title: 'Rendelések ? dátum alatt'}}
+          options={{
+            title: 'Rendelések ? dátum alatt',
+            headerStyle: {
+              backgroundColor: '#2b2b28',
+            },
+            headerTitleStyle: {color: 'white'},
+            headerTintColor: 'white',
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
