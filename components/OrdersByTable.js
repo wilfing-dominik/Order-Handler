@@ -4,7 +4,7 @@ import {Text, View, Button, FlatList, TouchableOpacity} from 'react-native';
 import {sqlQuery} from '../utils/dbConnection';
 
 export default OrdersByTable = ({navigation, route}) => {
-  const [items, setItems] = useState([]);
+  const [orders, setOrders] = useState([]);
 
   const isVisible = useIsFocused();
 
@@ -20,25 +20,25 @@ export default OrdersByTable = ({navigation, route}) => {
       let tableId = route.params.id;
       sqlQuery(
         'SELECT * FROM ORD JOIN Product ON ORD.product_id=Product.id WHERE localtable_id=?;',
-        setItems,
+        setOrders,
         tableId,
       );
     }
-  }, [isVisible, items]);
+  }, [isVisible, orders]);
 
   function handleTablePay(localTableId) {
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    for (let i = 0; i < items.length; i++) {
-      for (let j = 0; j < items[i].amount; j++) {
+    for (let i = 0; i < orders.length; i++) {
+      for (let j = 0; j < orders[i].amount; j++) {
         sqlQuery(
           'INSERT INTO CompletedOrder (product_name, order_date, main_price) VALUES (?,?,?)',
           null,
-          items[i].name,
+          orders[i].name,
           year + '-' + month + '-' + date,
-          parseInt(items[i].main_price, 10),
+          parseInt(orders[i].main_price, 10),
         );
       }
     }
@@ -48,7 +48,6 @@ export default OrdersByTable = ({navigation, route}) => {
   }
 
   function deleteOrder(orderId, amount) {
-    // TODO
     if (amount > 1) {
       let tableId = route.params.id;
       sqlQuery(
@@ -60,24 +59,21 @@ export default OrdersByTable = ({navigation, route}) => {
       );
     } else {
       sqlQuery('DELETE FROM ORD WHERE product_id=?;', null, orderId);
-      // navigation.navigate("HomeScreen")
     }
   }
 
-  const renderTableItem = ({item}) => {
+  const renderTableItem = ({item: order}) => {
     return (
       <View style={styles.TableItem}>
-        <Text style={styles.Bold}>{item.name}</Text>
-        {/* <Text>
-          <Text style={styles.Bold}>{item.eur}</Text> Eur
-        </Text> */}
+        <Text style={styles.Bold}>{order.name}</Text>
+
         <Text>
-          <Text style={styles.Bold}>{item.main_price}</Text> ?
+          <Text style={styles.Bold}>{order.main_price}</Text> ?
         </Text>
         <Text>
-          <Text style={styles.Bold}>{item.amount}</Text> DB
+          <Text style={styles.Bold}>{order.amount}</Text> DB
         </Text>
-        <TouchableOpacity onPress={() => deleteOrder(item.id, item.amount)}>
+        <TouchableOpacity onPress={() => deleteOrder(order.id, order.amount)}>
           <Text
             style={{
               backgroundColor: 'red',
@@ -98,14 +94,13 @@ export default OrdersByTable = ({navigation, route}) => {
         <Text style={[styles.Font, styles.TableSum]}>
           Teljes összeg:
           <Text style={[styles.TableSum, styles.Bold, styles.TableSum]}>
-            {items.reduce((a, v) => (a = a + v.main_price * v.amount), 0)} ?
-            {/* {items.reduce((a, v) => (a = a + v.eur * v.amount), 0)} EUR */}
+            {orders.reduce((a, v) => (a = a + v.main_price * v.amount), 0)} ?
           </Text>
         </Text>
         <FlatList
-          data={items}
+          data={orders}
           renderItem={renderTableItem}
-          keyExtractor={tableItems => tableItems.id}
+          keyExtractor={order => order.id}
           numColumns={1}
         />
       </View>

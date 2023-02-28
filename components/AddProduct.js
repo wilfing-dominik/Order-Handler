@@ -42,12 +42,6 @@ export default AddProduct = ({navigation}) => {
           style={[styles.Font, styles.Input]}
           onChangeText={productName => setProductName(productName)}
         />
-        {/* <TextInput
-          placeholder="Ár euróban"
-          placeholderTextColor={placeholderTextColor}
-          style={[styles.Font, styles.Input]}
-          onChangeText={productEur => setProductEur(productEur)}
-        /> */}
 
         <TextInput
           placeholder="Ár"

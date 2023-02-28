@@ -56,14 +56,6 @@ export default EditProduct = ({navigation, route}) => {
         placeholderTextColor="#2b2b28"
       />
 
-      {/* <Text style={styles.Font}>Euró:</Text>
-      <TextInput
-        style={styles.Font}
-        onChangeText={productEur => setProductEur(productEur)}
-        placeholder={String(route.params.eur)}
-        placeholderTextColor="#2b2b28"
-      /> */}
-
       <Button
         title="Adatok módosítása"
         onPress={() =>
