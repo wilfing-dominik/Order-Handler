@@ -39,7 +39,7 @@ export default Home = ({navigation}) => {
     for (let i = 0; i < items.length; i++) {
       for (let j = 0; j < orders.length; j++) {
         if (items[i].id == orders[j].localtable_id) {
-          temp[i] += orders[j].huf * orders[j].amount;
+          temp[i] += orders[j].main_price * orders[j].amount;
         }
       }
     }

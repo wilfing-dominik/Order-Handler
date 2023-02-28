@@ -34,12 +34,11 @@ export default OrdersByTable = ({navigation, route}) => {
     for (let i = 0; i < items.length; i++) {
       for (let j = 0; j < items[i].amount; j++) {
         sqlQuery(
-          'INSERT INTO CompletedOrder (product_name, order_date, HUF, EUR) VALUES (?,?,?,?)',
+          'INSERT INTO CompletedOrder (product_name, order_date, main_price) VALUES (?,?,?)',
           null,
           items[i].name,
           year + '-' + month + '-' + date,
-          parseInt(items[i].huf, 10),
-          parseInt(items[i].eur, 10),
+          parseInt(items[i].main_price, 10),
         );
       }
     }
@@ -69,11 +68,11 @@ export default OrdersByTable = ({navigation, route}) => {
     return (
       <View style={styles.TableItem}>
         <Text style={styles.Bold}>{item.name}</Text>
+        {/* <Text>
+          <Text style={styles.Bold}>{item.eur}</Text> Eur
+        </Text> */}
         <Text>
-          <Text style={styles.Bold}>{item.eur}</Text> Eur{' '}
-        </Text>
-        <Text>
-          <Text style={styles.Bold}>{item.huf}</Text> Huf
+          <Text style={styles.Bold}>{item.main_price}</Text> ?
         </Text>
         <Text>
           <Text style={styles.Bold}>{item.amount}</Text> DB
@@ -99,8 +98,8 @@ export default OrdersByTable = ({navigation, route}) => {
         <Text style={[styles.Font, styles.TableSum]}>
           Teljes összeg:
           <Text style={[styles.TableSum, styles.Bold, styles.TableSum]}>
-            {items.reduce((a, v) => (a = a + v.huf * v.amount), 0)} HUF |{' '}
-            {items.reduce((a, v) => (a = a + v.eur * v.amount), 0)} EUR
+            {items.reduce((a, v) => (a = a + v.main_price * v.amount), 0)} ?
+            {/* {items.reduce((a, v) => (a = a + v.eur * v.amount), 0)} EUR */}
           </Text>
         </Text>
         <FlatList

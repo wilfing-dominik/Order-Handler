@@ -10,7 +10,7 @@ import {sqlQuery} from '../utils/dbConnection';
 
 export default MainSettings = () => {
   const [restaurantName, setRestaurantName] = useState('');
-  const [primaryCurrency, setPrimaryCurrency] = useState('');
+  const [mainPrice, setMainPrice] = useState('');
 
   return (
     <View style={styles.container}>
@@ -37,18 +37,18 @@ export default MainSettings = () => {
       <View style={styles.settingContainer}>
         <TextInput
           style={styles.input}
-          onChangeText={primaryCurrency => setPrimaryCurrency(primaryCurrency)}
+          onChangeText={mainPrice => setMainPrice(mainPrice)}
           placeholder="Fő pénznem"
         />
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            console.log(primaryCurrency);
+            console.log(mainPrice);
             sqlQuery(
               'UPDATE MainSettings SET value=? WHERE setting_name=?',
               null,
-              primaryCurrency,
-              'primary_currency',
+              mainPrice,
+              'main_price',
             );
           }}>
           <Text>Módosítás</Text>

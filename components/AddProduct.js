@@ -4,8 +4,7 @@ import {sqlQuery} from '../utils/dbConnection';
 
 export default AddProduct = ({navigation}) => {
   const [productName, setProductName] = useState('');
-  const [productEur, setProductEur] = useState('');
-  const [productHuf, setProductHuf] = useState('');
+  const [mainPrice, setMainPrice] = useState('');
 
   let placeholderTextColor = '#2b2b28';
 
@@ -18,22 +17,17 @@ export default AddProduct = ({navigation}) => {
   }
 
   function handleAddProductToInventory() {
-    if (
-      productName.length < 3 ||
-      !isNumber(productHuf) ||
-      !isNumber(productEur)
-    ) {
+    if (productName.length < 3 || !isNumber(mainPrice)) {
       Alert.alert(
         'A megadott adatok nem megfelelőek!',
         '\n- Termék név min. 3 BETŰ \n\n- Az áraknak SZÁMNAK kell lennie!',
       );
     } else {
       sqlQuery(
-        'INSERT INTO Product (name, eur, huf) VALUES (?,?,?)',
+        'INSERT INTO Product (name, main_price) VALUES (?,?)',
         null,
         productName,
-        productEur,
-        productHuf,
+        mainPrice,
       );
       navigation.navigate('AllProduct');
     }
@@ -48,18 +42,18 @@ export default AddProduct = ({navigation}) => {
           style={[styles.Font, styles.Input]}
           onChangeText={productName => setProductName(productName)}
         />
-        <TextInput
+        {/* <TextInput
           placeholder="Ár euróban"
           placeholderTextColor={placeholderTextColor}
           style={[styles.Font, styles.Input]}
           onChangeText={productEur => setProductEur(productEur)}
-        />
+        /> */}
 
         <TextInput
-          placeholder="Ár forintban"
+          placeholder="Ár"
           placeholderTextColor={placeholderTextColor}
           style={[styles.Font, styles.Input]}
-          onChangeText={productHuf => setProductHuf(productHuf)}
+          onChangeText={productMainPrice => setMainPrice(productMainPrice)}
         />
       </View>
 

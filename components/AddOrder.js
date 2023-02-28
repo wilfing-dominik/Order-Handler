@@ -79,8 +79,8 @@ export default AddOrder = ({navigation, route}) => {
       onPress={onPress}
       style={[styles.HomeItem, backgroundColor]}>
       <Text style={[styles.Title]}>{item.name}</Text>
-      <Text style={[styles.Title, styles.Bold]}>{item.huf} Huf</Text>
-      <Text style={[styles.Title, styles.Bold]}>{item.eur} Eur</Text>
+      <Text style={[styles.Title, styles.Bold]}>{item.main_price} ?</Text>
+      {/* <Text style={[styles.Title, styles.Bold]}>{item.eur} Eur</Text> */}
     </TouchableOpacity>
   );
 

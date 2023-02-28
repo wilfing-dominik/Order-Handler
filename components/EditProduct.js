@@ -4,8 +4,7 @@ import {sqlQuery} from '../utils/dbConnection';
 
 export default EditProduct = ({navigation, route}) => {
   const [productName, setProductName] = useState('');
-  const [productEur, setProductEur] = useState('');
-  const [productHuf, setProductHuf] = useState('');
+  const [productMainPrice, setProductMainPrice] = useState('');
 
   function isNumber(str) {
     if (str.trim() === '') {
@@ -19,23 +18,18 @@ export default EditProduct = ({navigation, route}) => {
     navigation.navigate('AllProduct');
   }
 
-  function handleEditItem(productId, productName, productEur, productHuf) {
-    if (
-      productName.length < 3 ||
-      !isNumber(productHuf) ||
-      !isNumber(productEur)
-    ) {
+  function handleEditItem(productId, productName, productMainPrice) {
+    if (productName.length < 3 || !isNumber(productMainPrice)) {
       Alert.alert(
         'A megadott adatok nem megfelelőek!',
         '\n- Termék név min. 3 BETŰ \n\n- Az áraknak SZÁMNAK kell lennie!',
       );
     } else {
       sqlQuery(
-        'UPDATE Product SET name=?, eur=?, huf=? WHERE id=?',
+        'UPDATE Product SET name=?, main_price=? WHERE id=?',
         null,
         productName,
-        productEur,
-        productHuf,
+        productMainPrice,
         productId,
       );
       navigation.navigate('Home');
@@ -57,23 +51,23 @@ export default EditProduct = ({navigation, route}) => {
       <Text style={styles.Font}>Forint:</Text>
       <TextInput
         style={styles.Font}
-        onChangeText={productHuf => setProductHuf(productHuf)}
-        placeholder={String(route.params.huf)}
+        onChangeText={productMainPrice => setProductMainPrice(productMainPrice)}
+        placeholder={String(route.params.main_price)}
         placeholderTextColor="#2b2b28"
       />
 
-      <Text style={styles.Font}>Euró:</Text>
+      {/* <Text style={styles.Font}>Euró:</Text>
       <TextInput
         style={styles.Font}
         onChangeText={productEur => setProductEur(productEur)}
         placeholder={String(route.params.eur)}
         placeholderTextColor="#2b2b28"
-      />
+      /> */}
 
       <Button
         title="Adatok módosítása"
         onPress={() =>
-          handleEditItem(route.params.id, productName, productEur, productHuf)
+          handleEditItem(route.params.id, productName, productMainPrice)
         }
       />
       <Button

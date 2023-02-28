@@ -28,13 +28,12 @@ export default AllProduct = ({navigation}) => {
           navigation.navigate('EditProduct', {
             id: item.id,
             name: item.name,
-            eur: item.eur,
-            huf: item.huf,
+            main_price: item.main_price,
           })
         }
         style={[styles.AllProductItem, backgroundColor]}>
         <Text style={[styles.Font, styles.Title]}>
-          {item.name} {item.huf} Huf {item.eur} EUR
+          {item.name} {item.main_price} ?
         </Text>
       </TouchableOpacity>
     );
