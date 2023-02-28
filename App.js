@@ -30,7 +30,16 @@ const App = () => {
           }}
         />
 
-        <Stack.Screen name="MainSettings" component={MainSettings} />
+        <Stack.Screen
+          name="MainSettings"
+          component={MainSettings}
+          options={{
+            headerTitle: 'Beállítások',
+            headerStyle: {backgroundColor: '#2b2b28'},
+            headerTitleStyle: {color: 'white'},
+            headerTintColor: 'white',
+          }}
+        />
 
         <Stack.Screen
           name="OrdersByTable"
